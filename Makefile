@@ -1,5 +1,7 @@
 PARAM="gcc -std=c99 -pedantic -Wextra -Wall -g"
 
+.PHONY: program clean pack
+
 all: program
 
 program: main.o
