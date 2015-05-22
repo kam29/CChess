@@ -2,37 +2,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-enum FIGURKY 
-{
-	NIC = -1,
-	BKRA, BDAM, BJEZ, BSTR, BVEZ, BPES,
-	CKRA, CDAM, CJEZ, CSTR, CVEZ, CPES
-};
-
-enum RADKY
-{
-	RAD1 = 0, RAD2, RAD3, RAD4, RAD5, RAD6, RAD7, RAD8
-};
-
-enum SLOUPCE
-{
-	SLOA = 0, SLOB, SLOC, SLOD, SLOE, SLOF, SLOG, SLOH
-};
-
-typedef struct hra_t {
-	int plocha [8][8];
-	int vyhozeno [32];
-	char stav;
-	bool sach;
-} hra_t;
-
-enum CHYBY {
-	ERRMALLOC
-};
-
-void chyba (char typ, hra_t* struktura) {
-
-}
+#include "global.h"
+#include "error.h"
+#include "prikazy.h"
 
 void Inicializace(hra_t* hra)
 {
@@ -75,7 +47,35 @@ void Inicializace(hra_t* hra)
 int main () 
 {
 	hra_t* hra = malloc(sizeof(hra_t));
-	if (hra == NULL) chyba(ERRMALLOC, NULL);
+	if (hra == NULL) Chyba(ERRMALLOC, NULL);
+	char* prikaz = malloc(MAXDELKAPRIKAZU);
+	char kontrola;
 	Inicializace(hra);
-	return 0;
+	// Inicializace síťového připojení
+	if (hra->barva == BILA)
+	{
+		while (true)
+		{
+			kontrola = NactiPrikaz(prikaz, MAXDELKAPRIKAZU);
+			if (kontrola == ERRPRIKAZ) chyba(kontrola, hra);
+			if (kontola == OK) break;
+		}
+		if (!ZpracujPrikaz(prikaz, hra)) chyba(ERRPRIKAZ, hra);
+		//Aktualizace grafiky
+	}
+	while (true)
+	{
+		// Uložení příchozího příkazu do proměné příkaz
+		if (!ZpracujPrikaz(prikaz, hra)) chyba(ERRPRIKAZ, hra);
+		//Aktualizace grafiky
+		while (true)
+		{
+			kontrola = NactiPrikaz(prikaz, MAXDELKAPRIKAZU) 
+			if (kontrola == ERRPRIKAZ) chyba(ERRPRIKAZ, hra);
+			if (kontrola == OK) break;
+		}
+		if (!ZpracujPrikaz(prikaz, hra)) chyba(ERRPRIKAZ, hra);
+		//Aktualizace grafiky	
+	}
+	Chyba(OK, hra);
 }

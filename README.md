@@ -3,6 +3,7 @@
 proměné - malá písmena, mezera = podtřžítko
 funkce - první písmeno slova Velké, mezery nebudou
 konstanty - všechna velká písmena, mezera = podtržítko
+nové datové typy - malými písmeny bez mezer, musí končit na "_t"
 jazyk - čeština
 hlavní program - main.c
 překlad pomocí make
