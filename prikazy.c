@@ -6,15 +6,8 @@
 #include <string.h>
 
 #include "global.h"
+#include "tahy.h"
 
-typedef struct tah_t
-{
-	char kdo;
-	char zx;
-	char zy;
-	char dox;
-	char doy;
-} tah_t;
 
 char VratRadek (char znak)
 {
@@ -141,7 +134,42 @@ bool ZpracujPrikaz (char* prikaz, hra_t* hra)
 {
 	tah_t tah;
 	if (!ValidujPrikaz(&tah, prikaz, hra->barva)) return false;
-	
+	if (tah.zx == NIC)
+	{
+		bool nedostatek = false;
+		char pomx, pomy;
+		for (int i=0; i<8; i++)
+		{
+			for (int j=0; j<8; j++)
+			{
+				if (tah.kdo == hra->pole[i][j])
+				{
+					if (!nedostatek)
+					{
+						tah.zx = i;
+						tah.zy = j;
+						if (ValidujTah(hra, &tah)) nedostatek = true;
+					}
+					else
+					{
+						pomx = tah.zx;
+						pomy = tah.zy;
+						tah.zx = i;
+						tah.zy = j;
+						if (ValidujTah(hra, &tah)) return false;
+						tah.zx = pomx;
+						tah.zy = pomy;
+					}
+				}
+			}
+		}
+		ProvedTah(hra, &tah);
+	}
+	else 
+	{
+		if (!ValidujTah(hra, &tah)) return false;
+		ProvedTah(hra, &tah);
+	}
 }
 
 #endif

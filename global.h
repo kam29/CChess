@@ -28,6 +28,15 @@ typedef struct hra_t {
 	bool barva;
 } hra_t;
 
+typedef struct tah_t
+{
+	char kdo;
+	char zx;
+	char zy;
+	char dox;
+	char doy;
+} tah_t;
+
 #define CERNA 0
 #define BILA 1
 
