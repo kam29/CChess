@@ -4,10 +4,10 @@
 #include <stdbool.h>
 
 #define MAXDELKAPRIKAZU
+#define NIC -1
 
 enum FIGURKY /
 {
-	NIC = -1,
 	BKRA, BDAM, BJEZ, BSTR, BVEZ, BPES,
 	CKRA, CDAM, CJEZ, CSTR, CVEZ, CPES
 };
@@ -22,14 +22,26 @@ enum SLOUPCE
 	SLOA = 0, SLOB, SLOC, SLOD, SLOE, SLOF, SLOG, SLOH
 };
 
+enum SPECIAL
+{
+	BMRO, BVRO, CMRO, CVRO, BMIMO, CMIMO, BPEST, CPEST
+};
+
+enum FLAGSY
+{
+	BKRAL=0, CKRAL, BVEZ1, BVEZ2, CVEZ1, CVEZ2, BIMOA, BMIMOB, BMIMOC, BMIMOD, BMIMOE, BMIMOF, BMIMOG, BMIMOH, CIMOA, CMIMOB, CMIMOC, CMIMOD, CMIMOE, CMIMOF, CMIMOG, CMIMOH,
+}
+
 typedef struct hra_t {
-	int plocha [8][8];
-	int vyhozeno [32];
+	char plocha [8][8];
+	char vyhozeno [30];
+	bool flagy [22]; //8+8 pro řádky na kterých se uzkutečňuje braní mimochodem; hnutý král a obě věže pro každou barvu
 	bool barva;
 } hra_t;
 
 typedef struct tah_t
 {
+	char special;
 	char kdo;
 	char zx;
 	char zy;

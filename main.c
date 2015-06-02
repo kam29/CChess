@@ -9,6 +9,7 @@
 void Inicializace(hra_t* hra)
 {
 	for (int i=0; i<32; i++) hra->vyhozeno[i] = NIC;
+	for (int i=0; i<22; i++) hra->flagy[i] = false;
 	for (int i=RAD3; i<RAD7; i++) for (int j=SLOA; j<SLOH; j++) hra->plocha [i][j] = NIC;
 	hra->plocha [RAD1][SLOA] = BVEZ;
 	hra->plocha [RAD1][SLOB] = BJEZ;

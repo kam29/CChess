@@ -5,6 +5,37 @@
 
 bool ValidujTah(hra_t* hra, tah_t* tah)
 {
+	// Speciální tahy
+	if (tah->special == BMROS)
+	{
+		if (hra->pole[RAD1][SLOF] != NIC || hra->pole[RAD1][SLOG] != NIC) return false;
+		if (hra->flagy[BKRAL] == true || hra->flagy[BVEZ2] == true) return false;
+		hra->flagy[BKRAL] = hra->flagy[BVEZ2] = true;
+		return true;
+	}
+	if (tah->special == BVROS)
+	{
+		if (hra->pole[RAD1][SLOB] != NIC || hra->pole[RAD1][SLOC] != NIC || hra->pole[RAD1][SLOD]) return false;
+		if (hra->flagy[BKRAL] == true || hra->flagy[BVEZ1] == true) return false;
+		hra->flagy[BKRAL] = hra->flagy[BVEZ1] = true;
+		return true;
+	}
+	if (tah->special == CMROS)
+	{
+		if (hra->pole[RAD8][SLOF] != NIC || hra->pole[RAD8][SLOG] != NIC) return false;
+		if (hra->flagy[CKRAL] == true || hra->flagy[CVEZ2] == true) return false;
+		hra->flagy[CKRAL] = hra->flagy[CVEZ2] = true;
+		return true;
+	}
+	if (tah->special == CVROS)
+	{
+		if (hra->pole[RAD8][SLOB] != NIC || hra->pole[RAD8][SLOC] != NIC || hra->pole[RAD8][SLOD]) return false;
+		if (hra->flagy[CKRAL] == true || hra->flagy[CVEZ1] == true) return false;
+		hra->flagy[CKRAL] = hra->flagy[CVEZ1] = true;
+		return true;
+	}
+	
+	// Normální tahy
 	if (tah->kdo != hra->pole[tah->zx][tah->zy]) return false;
 	switch (tah->kdo)
 	{
@@ -124,9 +155,16 @@ void ProvedTah(hra_t* hra, tah_t* tah);
 			if (vyhozeno[i] == NIC) break;
 		}
 		vyhozeno[i] = pole[tah->dox][tah->doy];
-		pole[tah->dox][tah->doy] = pole[tah->zx][tah->zy];
-		pole[tah->zx][tah->zy] = NIC;
 	}
+	pole[tah->dox][tah->doy] = pole[tah->zx][tah->zy];
+	pole[tah->zx][tah->zy] = NIC;
+	// Nastavení flagů
+	if (hra->flagy[BKRAL] == false && tah->kdo == BKRA && tah->zx == RAD1 && tah->zy == SLOE) hra->flagy[BKRAL] = true;
+	if (hra->flagy[BVEZ1] == false && tah->kdo == BVEZ && tah->zx == RAD1 && tah->zy == SLOA) hra->flagy[BVEZ1] = true;
+	if (hra->flagy[BVEZ2] == false && tah->kdo == BVEZ && tah->zx == RAD1 && tah->zy == SLOH) hra->flagy[BVEZ2] = true;
+	if (hra->flagy[CKRAL] == false && tah->kdo == CKRA && tah->zx == RAD8 && tah->zy == SLOE) hra->flagy[CKRAL] = true;
+	if (hra->flagy[CVEZ1] == false && tah->kdo == CVEZ && tah->zx == RAD8 && tah->zy == SLOA) hra->flagy[CVEZ1] = true;
+	if (hra->flagy[CVEZ2] == false && tah->kdo == CVEZ && tah->zx == RAD8 && tah->zy == SLOH) hra->flagy[CVEZ2] = true;
 }
 
 #endif
