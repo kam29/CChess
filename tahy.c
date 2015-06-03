@@ -129,8 +129,16 @@ bool ValidujTah(hra_t* hra, tah_t* tah)
 			if (tah->doy-tah->zy != 1) return false;
 			else if ((tah->zx == tah->dox) && (hra->pole[tah->dox][tah->doy] != NIC)) return false;
 			else if ((tah->zx+1 == tah->dox) && (hra->pole[tah->dox][tah->doy] == NIC)) return false;
-			else if ((tah->zx-1 == tah->dox) && (hra->pole[tah->dox][tah->doy] == NIC)) return false;
+			else if ((tah->zx-1 == tah->dox) && (hra->pole[tah->dox][tah->doy] == NIC)) return false;	
 			else return false;
+			if (tah->dox == ROW8)
+			{
+				for (int i=0; i<30; i++)
+				{
+					if (hra->vyhozeno[i] == tah->special) break;
+				}
+				return false;
+			}
 			break;
 		case CPES:
 			if (tah->zy == ROW7 && tah->zy-tah->doy == 2 && hra->pole[tah->dox][tah->doy] != NIC) break;
@@ -139,8 +147,14 @@ bool ValidujTah(hra_t* hra, tah_t* tah)
 			else if ((tah->zx+1 == tah->dox) && (pole[tah->dox][tah->doy] == NIC)) return false;
 			else if ((tah->zx-1 == tah->dox) && (pole[tah->dox][tah->doy] == NIC)) return false;
 			else return false;
+			{
+				for (int i=0; i<30; i++)
+				{
+					if (hra->vyhozeno[i] == tah->special) break;
+				}
+				return false;
+			}
 			break;
-		// Doplnit speciální tahy
 	}
 	if (!ValidujSach(tah, hra)) return false; // Zkontroluje, jestli se hráč po provedení tahu není v šachu
 }
