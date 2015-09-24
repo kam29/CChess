@@ -13,22 +13,23 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <signal.h>
+#include <netdb.h>
 
-#define DATA_LENGTH		100
-#define DEFAULT_SOCKET_NUMBER	5000
+#define DATA_LENGTH 100
+#define DEFAULT_SOCKET_NUMBER 5000
 
-#define ERROR_SOCKET		1
-#define ERROR_BIND		2
-#define ERROR_IP		3
-#define ERROR_CONNECT		4
-#define ERROR_ACCEPTING		5
-#define ERROR_SEND		6
-#define ERROR_RECV		7
-#define ERROR_CLOSE		8
+#define ERROR_SOCKET 1
+#define ERROR_BIND 2
+#define ERROR_IP 3
+#define ERROR_CONNECT 4
+#define ERROR_ACCEPTING	5
+#define ERROR_SEND 6
+#define ERROR_RECV 7
+#define ERROR_CLOSE 8
 
-#define SECURE_BYTE		'8'
+//#define SECURE_BYTE		'8'
 
-#define SIGNALS signal(SIGTERM, signal_handler); signal(SIGINT, signal_handler);
+//#define SIGNALS signal(SIGTERM, signal_handler); signal(SIGINT, signal_handler);
 
 int stop = 0;
 
@@ -36,7 +37,7 @@ typedef struct client {
 
    int client_socket;
    struct sockaddr_in server_addr;
-   struct hostent sserver;
+   struct hostent * sserver;
 
    char in_buffer[DATA_LENGTH];
    char out_buffer[DATA_LENGTH];
@@ -49,7 +50,7 @@ typedef struct server {
    int client_socket;
    struct sockaddr_in server_addr;  
    struct sockaddr_in client_addr;
-   socklen_t clien;
+   socklen_t client_length;
 
    char in_buffer[DATA_LENGTH];
    char out_buffer[DATA_LENGTH];
@@ -70,7 +71,7 @@ void signal_handler(int signal)
 
 
 
-int create_server(server * serv, unsigned int port) {
+int create_server(server * serv, unsigned short int port) {
 
    serv->server_socket = socket(AF_INET, SOCK_STREAM, 0);
    if(serv->server_socket < 0) {
@@ -79,25 +80,27 @@ int create_server(server * serv, unsigned int port) {
    }
 
    bzero((char *) &serv->server_addr, sizeof(serv->server_addr));
+   bzero((char *) &serv->client_addr, sizeof(serv->client_addr));
 
    serv->server_addr.sin_family = AF_INET;
    serv->server_addr.sin_addr.s_addr = INADDR_ANY;
-   serv->server_addr.sin_port = htons(port);
+   serv->server_addr.sin_port = 6000;
 
    if(bind(serv->server_socket, (struct sockaddr *) &serv->server_addr, sizeof(serv->server_addr)) < 0) {
       perror("Binding socket");
       return ERROR_BIND;
    }
-
-   unsigned short int socket_number = getsocketname(serv->server_socket, (struct sockaddr *) &serv->server_addr, sizeof(serv->server_addr));   
-   printf("I'm listening on port: %hu", socket_number);
+  
+   int size = sizeof(serv->server_addr);
+   unsigned short int socket_number = getsockname(serv->server_socket, (struct sockaddr *) &serv->server_addr, &size);   
+   printf("I'm listening on port: %hu", serv->server_addr.sin_port);
 
    return EXIT_SUCCESS;
 }
 
 
 
-int create_client(client * cli, unsigned int port, char * ip) {
+int create_client(client * cli, unsigned short int port, char * ip) {
 
    cli->client_socket = socket(AF_INET, SOCK_STREAM, 0);
    if(cli->client_socket < 0) {
@@ -115,7 +118,7 @@ int create_client(client * cli, unsigned int port, char * ip) {
 
    cli->server_addr.sin_family = AF_INET;
    bcopy((char *)cli->sserver->h_addr_list[0],
-         (char *)&cli->sserver_addr.sin_addr.s_addr,
+         (char *)&cli->server_addr.sin_addr.s_addr,
          cli->sserver->h_length);
    cli->server_addr.sin_port = htons(port);
 
@@ -128,7 +131,8 @@ int create_client(client * cli, unsigned int port, char * ip) {
 
 int server_accept(server * serv) {
 
-   serv->client_socket = accept(serv->server_socket, (struct sockaddr *) &serv->server_addr, sizeof(serv->server_addr));
+   serv->client_length = sizeof(serv->client_addr);
+   serv->client_socket = accept(serv->server_socket, (struct sockaddr *) &serv->client_addr,  &serv->client_length);
 
    if(serv->client_socket < 0) {
       perror("Accepting client");
@@ -142,8 +146,8 @@ int server_accept(server * serv) {
 
 int client_connect(client * cli) {
 
-   if (connect(cli->client_socket,(struct sockaddr *) &cli->server_addr,sizeof(cli->server_addr)) < 0) {
-      error("Connecting to server");
+   if (connect(cli->client_socket, (struct sockaddr *) &cli->server_addr,sizeof(cli->server_addr)) < 0) {
+      perror("Connecting to server");
       return ERROR_CONNECT;
    }
 
@@ -192,6 +196,41 @@ int cancel_connection(int *sock) {
    }
 
    return EXIT_SUCCESS;
+}
+
+int main(int argc, char *argv[]) {
+
+   char ip[10] = "127.0.0.1";
+   if(argc != 2) {
+      return EXIT_FAILURE;
+   }
+
+   server serv;
+   client cli;
+
+   if(atoi(argv[1]) == 1) { // server
+      printf("SERVER MODE\n");
+
+      create_server(&serv, 5000);
+      server_accept(&serv);
+      cancel_connection(&serv.server_socket);
+
+   } else {
+
+      printf("CLIENT MODE\n");
+
+      create_client(&cli, 5000, ip);
+      client_connect(&cli);
+      cancel_connection(&cli.client_socket);
+
+   }
+/*int send_message(int * sock, char * buffer) {
+int recv_message(int *sock, char * buffer) {
+int cancel_connection(int *sock) {
+*/
+
+   return EXIT_SUCCESS;
+
 }
 
 
