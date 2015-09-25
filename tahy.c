@@ -9,7 +9,7 @@ bool ValidujSach(tah_t* tah, hra_t* hra) {
 
 bool ValidujTah(hra_t* hra, tah_t* tah)
 {
-	char i, j;
+	unsigned char i, j;
 	// Speciální tahy
 	if (tah->special == BMRO)
 	{

@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 #define MAXDELKAPRIKAZU 100
-#define NIC -1
+#define NIC 99
 
 enum FIGURKY
 {
@@ -43,10 +43,10 @@ typedef struct tah_t
 {
 	char special;
 	char kdo;
-	char zx;
-	char zy;
-	char dox;
-	char doy;
+	unsigned char zx;
+	unsigned char zy;
+	unsigned char dox;
+	unsigned char doy;
 } tah_t;
 
 #define CERNA 0

@@ -73,8 +73,50 @@ char VratFigurku (char znak, bool barva)
 	}
 }
 
-bool ValidujPrikaz (tah_t* tah, char* prikaz, bool brava)
+bool ValidujPrikaz (tah_t* tah, char* prikaz, bool barva)
 {
+	int znaky = strlen(prikaz);
+	switch (znaky)
+	{
+		case 2:
+			if (barva == BILA) tah->kdo = BPES;
+			else tah->kdo = CPES;
+			tah->zx = NIC;
+			tah->zy = NIC;
+			tah->dox = VratSloupec(prikaz[0]);
+			tah->doy = VratRadek(prikaz[1]);
+			if (tah->dox == NIC || tah->doy == NIC) return false;
+			else return true;
+			break;
+		case 4:
+			if (barva == BILA) tah->kdo = BPES;
+			else tah->kdo = CPES;
+			tah->zx = VratSloupec(prikaz[0]);
+			tah->zy = VratRadek(prikaz[1]);
+			tah->dox = VratSloupec(prikaz[2]);
+			tah->doy = VratRadek(prikaz[3]);
+			if (tah->dox == NIC || tah->doy == NIC || tah->zx == NIC || tah->zy == NIC) return false;
+			else return true;
+			break;
+		case 3:
+			tah->kdo = VratFigurku(prikaz[0], barva);
+			tah->zx = NIC;
+			tah->zy = NIC;
+			tah->dox = VratSloupec(prikaz[1]);
+			tah->doy = VratRadek(prikaz[2]);
+			if (tah->kdo == NIC || tah->dox == NIC || tah->doy == NIC) return false;
+			else return true;
+			break;
+		case 5:
+			tah->kdo = VratFigurku(prikaz[0], barva);
+			tah->zx = VratSloupec(prikaz[1]);
+			tah->zy = VratRadek(prikaz[2]);
+			tah->dox = VratSloupec(prikaz[3]);
+			tah->doy = VratRadek(prikaz[4]);
+			if (tah->kdo == NIC || tah->dox == NIC || tah->doy == NIC || tah->zx == NIC || tah->zy == NIC) return false;
+			else return true;
+			break;
+	}		
 	return true;
 }
 
