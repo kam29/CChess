@@ -1,5 +1,9 @@
+// obracené sloupce a řádky
+
 #ifndef tahyc
 #define tahyc
+
+#include <stdio.h>
 
 #include "global.h"
 
@@ -39,7 +43,6 @@ bool ValidujTah(hra_t* hra, tah_t* tah)
 		hra->flagy[CKRAL] = hra->flagy[CVEZ1] = true;
 		return true;
 	}
-	
 	// Normální tahy
 	if (tah->kdo != hra->plocha[tah->zx][tah->zy]) return false;
 	switch (tah->kdo)
@@ -130,6 +133,7 @@ bool ValidujTah(hra_t* hra, tah_t* tah)
 
 			break;
 		case BPES:
+			printf("BPES");
 			if (tah->zy == RAD2 && tah->doy-tah->zy == 2 && hra->plocha[tah->dox][tah->doy] != NIC) break;
 			if (tah->doy-tah->zy != 1) return false;
 			else if ((tah->zx == tah->dox) && (hra->plocha[tah->dox][tah->doy] != NIC)) return false;
@@ -144,6 +148,7 @@ bool ValidujTah(hra_t* hra, tah_t* tah)
 				}
 				return false;
 			}
+			printf("BPES2");
 			break;
 		case CPES:
 			if (tah->zy == RAD7 && tah->zy-tah->doy == 2 && hra->plocha[tah->dox][tah->doy] != NIC) break;
@@ -167,6 +172,7 @@ bool ValidujTah(hra_t* hra, tah_t* tah)
 
 void ProvedTah(hra_t* hra, tah_t* tah)
 {
+	printf("PROVEDTAH");
 	if (hra->plocha[tah->dox][tah->doy] != NIC)
 	{
 		int i;

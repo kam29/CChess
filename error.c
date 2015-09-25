@@ -12,13 +12,13 @@ void Chyba (char typ, hra_t* struktura)
 	switch (typ)
 	{
 		case ERRMALLOC:
-			fprintf(stderr, "Malloc error");
+			fprintf(stdout, "Malloc error");
 			break;
 		case ERRPRIKAZ:
-			fprintf(stderr, "Špatně zadaný příkaz");
+			fprintf(stdout, "Špatně zadaný příkaz");
 			break;
 	}
-	if (typ != OK) fprintf(stderr, "  error: %d\n", typ);
+	if (typ != OK) fprintf(stdout, "  error: %d\n", typ);
 	exit(typ);
 }
 

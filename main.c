@@ -157,7 +157,7 @@ void AktualizujGrafiku(hra_t* hra)
 		}
 		else printf (" ");
 	}
-	printf("\n\n");
+	printf("\n\nZadej tah: ");
 }
 
 int main () 
@@ -178,7 +178,9 @@ int main ()
 			if (kontrola == ERRPRIKAZ) Chyba(kontrola, hra);
 			if (kontrola == OK) break;
 		}
-		if (!ZpracujPrikaz(prikaz, hra)) Chyba(ERRPRIKAZ, hra);
+		if (!ZpracujPrikaz(prikaz, hra)) {
+			Chyba(ERRPRIKAZ, hra);
+		}
 		AktualizujGrafiku(hra);
 	}
 	while (true)

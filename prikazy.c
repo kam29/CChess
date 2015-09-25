@@ -56,6 +56,7 @@ char VratFigurku (char znak, bool barva)
 			case 'S': return BSTR;
 			case 'J': return BJEZ;
 			case 'V': return BVEZ;
+			case 'P': return BPES;
 		}
 		return NIC;
 	}
@@ -68,6 +69,7 @@ char VratFigurku (char znak, bool barva)
 			case 'S': return CSTR;
 			case 'J': return CJEZ;
 			case 'V': return CVEZ;
+			case 'P': return CPES;
 		}
 		return NIC;
 	}
@@ -75,6 +77,7 @@ char VratFigurku (char znak, bool barva)
 
 bool ValidujPrikaz (tah_t* tah, char* prikaz, bool barva)
 {
+	tah->special = NIC;
 	int znaky = strlen(prikaz);
 	switch (znaky)
 	{
@@ -83,8 +86,8 @@ bool ValidujPrikaz (tah_t* tah, char* prikaz, bool barva)
 			else tah->kdo = CPES;
 			tah->zx = NIC;
 			tah->zy = NIC;
-			tah->dox = VratSloupec(prikaz[0]);
-			tah->doy = VratRadek(prikaz[1]);
+			tah->doy = VratSloupec(prikaz[0]);
+			tah->dox = VratRadek(prikaz[1]);
 			if (tah->dox == NIC || tah->doy == NIC) return false;
 			else return true;
 			break;
@@ -93,8 +96,8 @@ bool ValidujPrikaz (tah_t* tah, char* prikaz, bool barva)
 			else tah->kdo = CPES;
 			tah->zx = VratSloupec(prikaz[0]);
 			tah->zy = VratRadek(prikaz[1]);
-			tah->dox = VratSloupec(prikaz[2]);
-			tah->doy = VratRadek(prikaz[3]);
+			tah->doy = VratSloupec(prikaz[2]);
+			tah->dox = VratRadek(prikaz[3]);
 			if (tah->dox == NIC || tah->doy == NIC || tah->zx == NIC || tah->zy == NIC) return false;
 			else return true;
 			break;
@@ -102,17 +105,17 @@ bool ValidujPrikaz (tah_t* tah, char* prikaz, bool barva)
 			tah->kdo = VratFigurku(prikaz[0], barva);
 			tah->zx = NIC;
 			tah->zy = NIC;
-			tah->dox = VratSloupec(prikaz[1]);
-			tah->doy = VratRadek(prikaz[2]);
+			tah->doy = VratSloupec(prikaz[1]);
+			tah->dox = VratRadek(prikaz[2]);
 			if (tah->kdo == NIC || tah->dox == NIC || tah->doy == NIC) return false;
 			else return true;
 			break;
 		case 5:
 			tah->kdo = VratFigurku(prikaz[0], barva);
-			tah->zx = VratSloupec(prikaz[1]);
-			tah->zy = VratRadek(prikaz[2]);
-			tah->dox = VratSloupec(prikaz[3]);
-			tah->doy = VratRadek(prikaz[4]);
+			tah->zy = VratSloupec(prikaz[1]);
+			tah->zx = VratRadek(prikaz[2]);
+			tah->doy = VratSloupec(prikaz[3]);
+			tah->dox = VratRadek(prikaz[4]);
 			if (tah->kdo == NIC || tah->dox == NIC || tah->doy == NIC || tah->zx == NIC || tah->zy == NIC) return false;
 			else return true;
 			break;
@@ -173,7 +176,9 @@ bool ZpracujPrikaz (char* prikaz, hra_t* hra)
 	}
 	else 
 	{
-		if (!ValidujTah(hra, &tah)) return false;
+		if (!ValidujTah(hra, &tah)) {
+			return false;
+		}
 		ProvedTah(hra, &tah);
 	}
 	return true;
