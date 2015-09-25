@@ -58,25 +58,27 @@ int main ()
 		while (true)
 		{
 			kontrola = NactiPrikaz(prikaz, MAXDELKAPRIKAZU);
-			if (kontrola == ERRPRIKAZ) chyba(kontrola, hra);
-			if (kontola == OK) break;
+			if (kontrola == ERRPRIKAZ) Chyba(kontrola, hra);
+			if (kontrola == OK) break;
 		}
-		if (!ZpracujPrikaz(prikaz, hra)) chyba(ERRPRIKAZ, hra);
+		if (!ZpracujPrikaz(prikaz, hra)) Chyba(ERRPRIKAZ, hra);
 		//Aktualizace grafiky
+		//use function system("command") to edit graphic - clear screen should be enough
 	}
 	while (true)
 	{
 		// Uložení příchozího příkazu do proměné příkaz
-		if (!ZpracujPrikaz(prikaz, hra)) chyba(ERRPRIKAZ, hra);
+		if (!ZpracujPrikaz(prikaz, hra)) Chyba(ERRPRIKAZ, hra);
 		//Aktualizace grafiky
 		while (true)
 		{
-			kontrola = NactiPrikaz(prikaz, MAXDELKAPRIKAZU) 
-			if (kontrola == ERRPRIKAZ) chyba(ERRPRIKAZ, hra);
+			kontrola = NactiPrikaz(prikaz, MAXDELKAPRIKAZU); 
+			if (kontrola == ERRPRIKAZ) Chyba(ERRPRIKAZ, hra);
 			if (kontrola == OK) break;
 		}
-		if (!ZpracujPrikaz(prikaz, hra)) chyba(ERRPRIKAZ, hra);
+		if (!ZpracujPrikaz(prikaz, hra)) Chyba(ERRPRIKAZ, hra);
 		//Aktualizace grafiky	
 	}
 	Chyba(OK, hra);
+	return 0;
 }

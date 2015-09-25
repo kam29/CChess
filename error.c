@@ -1,6 +1,11 @@
 #ifndef errorc
 #define errorc
 
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "global.h"
+
 void Chyba (char typ, hra_t* struktura) 
 {
 	if (struktura != NULL) free(struktura);

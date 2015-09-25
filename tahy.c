@@ -3,40 +3,45 @@
 
 #include "global.h"
 
+bool ValidujSach(tah_t* tah, hra_t* hra) {
+	return true;
+}
+
 bool ValidujTah(hra_t* hra, tah_t* tah)
 {
+	char i, j;
 	// Speciální tahy
-	if (tah->special == BMROS)
+	if (tah->special == BMRO)
 	{
-		if (hra->pole[RAD1][SLOF] != NIC || hra->pole[RAD1][SLOG] != NIC) return false;
+		if (hra->plocha[RAD1][SLOF] != NIC || hra->plocha[RAD1][SLOG] != NIC) return false;
 		if (hra->flagy[BKRAL] == true || hra->flagy[BVEZ2] == true) return false;
 		hra->flagy[BKRAL] = hra->flagy[BVEZ2] = true;
 		return true;
 	}
-	if (tah->special == BVROS)
+	if (tah->special == BVRO)
 	{
-		if (hra->pole[RAD1][SLOB] != NIC || hra->pole[RAD1][SLOC] != NIC || hra->pole[RAD1][SLOD]) return false;
+		if (hra->plocha[RAD1][SLOB] != NIC || hra->plocha[RAD1][SLOC] != NIC || hra->plocha[RAD1][SLOD]) return false;
 		if (hra->flagy[BKRAL] == true || hra->flagy[BVEZ1] == true) return false;
 		hra->flagy[BKRAL] = hra->flagy[BVEZ1] = true;
 		return true;
 	}
-	if (tah->special == CMROS)
+	if (tah->special == CMRO)
 	{
-		if (hra->pole[RAD8][SLOF] != NIC || hra->pole[RAD8][SLOG] != NIC) return false;
+		if (hra->plocha[RAD8][SLOF] != NIC || hra->plocha[RAD8][SLOG] != NIC) return false;
 		if (hra->flagy[CKRAL] == true || hra->flagy[CVEZ2] == true) return false;
 		hra->flagy[CKRAL] = hra->flagy[CVEZ2] = true;
 		return true;
 	}
-	if (tah->special == CVROS)
+	if (tah->special == CVRO)
 	{
-		if (hra->pole[RAD8][SLOB] != NIC || hra->pole[RAD8][SLOC] != NIC || hra->pole[RAD8][SLOD]) return false;
+		if (hra->plocha[RAD8][SLOB] != NIC || hra->plocha[RAD8][SLOC] != NIC || hra->plocha[RAD8][SLOD]) return false;
 		if (hra->flagy[CKRAL] == true || hra->flagy[CVEZ1] == true) return false;
 		hra->flagy[CKRAL] = hra->flagy[CVEZ1] = true;
 		return true;
 	}
 	
 	// Normální tahy
-	if (tah->kdo != hra->pole[tah->zx][tah->zy]) return false;
+	if (tah->kdo != hra->plocha[tah->zx][tah->zy]) return false;
 	switch (tah->kdo)
 	{
 		case BKRA:
@@ -51,19 +56,19 @@ bool ValidujTah(hra_t* hra, tah_t* tah)
 		case CVEZ:
 			if (tah->zx == tah->dox && tah->zy < tah->doy)
 			{
-				for (char i=tah->zy+1; i<tah->doy; i++) if (hra->pole[tah->zx][i] != NIC) return false;
+				for (i=tah->zy+1; i<tah->doy; i++) if (hra->plocha[tah->zx][i] != NIC) return false;
 			}
 			else if (tah->zx == tah->dox && tah->zy > tah->doy)
 			{
-				for (char i=tah->zy-1; i>tah->doy; i--) if (hra->pole[tah->zx][i] != NIC) return false;
+				for (i=tah->zy-1; i>tah->doy; i--) if (hra->plocha[tah->zx][i] != NIC) return false;
 			}
 			else if (tah->zy == tah->doy && tah->zx < tah->dox)
 			{
-				for (char i=tah->zx+1; i<tah->dox; i++) if (hra->pole[i][tah->zy] != NIC) return false;
+				for (i=tah->zx+1; i<tah->dox; i++) if (hra->plocha[i][tah->zy] != NIC) return false;
 			}
 			else if (tah->zy == tah->doy && tah->zx > tah->dox)
 			{
-				for (char i=tah->zx-1; i>tah->dox; i--) if (hra->pole[i][tah->zy] != NIC) return false;
+				for (i=tah->zx-1; i>tah->dox; i--) if (hra->plocha[i][tah->zy] != NIC) return false;
 			}
 			else return false;
 			break;
@@ -71,69 +76,69 @@ bool ValidujTah(hra_t* hra, tah_t* tah)
 		case CSTR:
 			if (((tah->zx-tah->dox) == (tah->zy-tah->doy)) && (tah->zx < tah->dox))
 			{
-				for (char i=tah->zx+1, char j=tah->zy+1; i<tah->dox; i++, j++) if (hra->pole[i][j] != NIC) return false;
+				for (i=tah->zx+1, j=tah->zy+1; i<tah->dox; i++, j++) if (hra->plocha[i][j] != NIC) return false;
 			}
 			else if (((tah->zx-tah->dox) == (tah->zy-tah->doy)) && (tah->zx > tah->dox))
 			{
-				for (char i=tah->zx-1, char j=tah->zy-1; i>tah->dox; i--, j--) if (hra->pole[i][j] != NIC) return false;
+				for (i=tah->zx-1, j=tah->zy-1; i>tah->dox; i--, j--) if (hra->plocha[i][j] != NIC) return false;
 			}
 			else if (((tah->zx-tah->dox) == (tah->doy-tah->zy)) && (tah->zx < tah->dox))
 			{
-				for (char i=tah->zx+1, char j=tah->zy-1; i<tah->dox; i++, j--) if (hra->pole[i][j] != NIC) return false;
+				for (i=tah->zx+1, j=tah->zy-1; i<tah->dox; i++, j--) if (hra->plocha[i][j] != NIC) return false;
 			}
 			else if (((tah->zx-tah->dox) == (tah->doy-tah->zy)) && (tah->zx > tah->dox))
 			{
-				for (char i=tah->zx-1, char j=tah->zy+1; i>tah->dox; i--, j++) if (hra->pole[i][j] != NIC) return false;
+				for (i=tah->zx-1, j=tah->zy+1; i>tah->dox; i--, j++) if (hra->plocha[i][j] != NIC) return false;
 			}
 			else return false;
-			break;;
+			break;
 		case BDAM:
 		case CDAM:
 			if (tah->zx == tah->dox && tah->zy < tah->doy)
 			{
-				for (char i=tah->zy+1; i<tah->doy; i++) if (hra->pole[tah->zx][i] != NIC) return false;
+				for (i=tah->zy+1; i<tah->doy; i++) if (hra->plocha[tah->zx][i] != NIC) return false;
 			}
 			else if (tah->zx == tah->dox && tah->zy > tah->doy)
 			{
-				for (char i=tah->zy-1; i>tah->doy; i--) if (hra->pole[tah->zx][i] != NIC) return false;
+				for (i=tah->zy-1; i>tah->doy; i--) if (hra->plocha[tah->zx][i] != NIC) return false;
 			}
 			else if (tah->zy == tah->doy && tah->zx < tah->dox)
 			{
-				for (char i=tah->zx+1; i<tah->dox; i++) if (hra->pole[i][tah->zy] != NIC) return false;
+				for (i=tah->zx+1; i<tah->dox; i++) if (hra->plocha[i][tah->zy] != NIC) return false;
 			}
 			else if (tah->zy == tah->doy && tah->zx > tah->dox)
 			{
-				for (char i=tah->zx-1; i>tah->dox; i--) if (hra->pole[i][tah->zy] != NIC) return false;
+				for (i=tah->zx-1; i>tah->dox; i--) if (hra->plocha[i][tah->zy] != NIC) return false;
 			}
 			else if (((tah->zx-tah->dox) == (tah->zy-tah->doy)) && (tah->zx < tah->dox))
 			{
-				for (char i=tah->zx+1, char j=tah->zy+1; i<tah->dox; i++, j++) if (hra->pole[i][j] != NIC) return false;
+				for (i=tah->zx+1, j=tah->zy+1; i<tah->dox; i++, j++) if (hra->plocha[i][j] != NIC) return false;
 			}
 			else if (((tah->zx-tah->dox) == (tah->zy-tah->doy)) && (tah->zx > tah->dox))
 			{
-				for (char i=tah->zx-1, char j=tah->zy-1; i>tah->dox; i--, j--) if (hra->pole[i][j] != NIC) return false;
+				for (i=tah->zx-1, j=tah->zy-1; i>tah->dox; i--, j--) if (hra->plocha[i][j] != NIC) return false;
 			}
 			else if (((tah->zx-tah->dox) == (tah->doy-tah->zy)) && (tah->zx < tah->dox))
 			{
-				for (char i=tah->zx+1, char j=tah->zy-1; i<tah->dox; i++, j--) if (hra->pole[i][j] != NIC) return false;
+				for (i=tah->zx+1, j=tah->zy-1; i<tah->dox; i++, j--) if (hra->plocha[i][j] != NIC) return false;
 			}
 			else if (((tah->zx-tah->dox) == (tah->doy-tah->zy)) && (tah->zx > tah->dox))
 			{
-				for (char i=tah->zx-1, char j=tah->zy+1; i>tah->dox; i--, j++) if (hra->pole[i][j] != NIC) return false;
+				for (i=tah->zx-1, j=tah->zy+1; i>tah->dox; i--, j++) if (hra->plocha[i][j] != NIC) return false;
 			}
 			else return false;
 
 			break;
 		case BPES:
-			if (tah->zy == ROW2 && tah->doy-tah->zy == 2 && hra->pole[tah->dox][tah->doy] != NIC) break;
+			if (tah->zy == RAD2 && tah->doy-tah->zy == 2 && hra->plocha[tah->dox][tah->doy] != NIC) break;
 			if (tah->doy-tah->zy != 1) return false;
-			else if ((tah->zx == tah->dox) && (hra->pole[tah->dox][tah->doy] != NIC)) return false;
-			else if ((tah->zx+1 == tah->dox) && (hra->pole[tah->dox][tah->doy] == NIC)) return false;
-			else if ((tah->zx-1 == tah->dox) && (hra->pole[tah->dox][tah->doy] == NIC)) return false;	
+			else if ((tah->zx == tah->dox) && (hra->plocha[tah->dox][tah->doy] != NIC)) return false;
+			else if ((tah->zx+1 == tah->dox) && (hra->plocha[tah->dox][tah->doy] == NIC)) return false;
+			else if ((tah->zx-1 == tah->dox) && (hra->plocha[tah->dox][tah->doy] == NIC)) return false;	
 			else return false;
-			if (tah->dox == ROW8)
+			if (tah->dox == RAD8)
 			{
-				for (int i=0; i<30; i++)
+				for (i=0; i<30; i++)
 				{
 					if (hra->vyhozeno[i] == tah->special) break;
 				}
@@ -141,14 +146,14 @@ bool ValidujTah(hra_t* hra, tah_t* tah)
 			}
 			break;
 		case CPES:
-			if (tah->zy == ROW7 && tah->zy-tah->doy == 2 && hra->pole[tah->dox][tah->doy] != NIC) break;
+			if (tah->zy == RAD7 && tah->zy-tah->doy == 2 && hra->plocha[tah->dox][tah->doy] != NIC) break;
 			if (tah->zy-tah->doy != 1) return false;
-			else if ((tah->zx == tah->dox) && (pole[tah->dox][tah->doy] != NIC)) return false;
-			else if ((tah->zx+1 == tah->dox) && (pole[tah->dox][tah->doy] == NIC)) return false;
-			else if ((tah->zx-1 == tah->dox) && (pole[tah->dox][tah->doy] == NIC)) return false;
+			else if ((tah->zx == tah->dox) && (hra->plocha[tah->dox][tah->doy] != NIC)) return false;
+			else if ((tah->zx+1 == tah->dox) && (hra->plocha[tah->dox][tah->doy] == NIC)) return false;
+			else if ((tah->zx-1 == tah->dox) && (hra->plocha[tah->dox][tah->doy] == NIC)) return false;
 			else return false;
 			{
-				for (int i=0; i<30; i++)
+				for (i=0; i<30; i++)
 				{
 					if (hra->vyhozeno[i] == tah->special) break;
 				}
@@ -156,22 +161,23 @@ bool ValidujTah(hra_t* hra, tah_t* tah)
 			}
 			break;
 	}
-	if (!ValidujSach(tah, hra)) return false; // Zkontroluje, jestli se hráč po provedení tahu není v šachu
+	if (!ValidujSach(tah, hra)) return false; // Zkontroluje, jestli hráč po provedení tahu není v šachu
+	return true;
 }
 
-void ProvedTah(hra_t* hra, tah_t* tah);
+void ProvedTah(hra_t* hra, tah_t* tah)
 {
-	if (hra->pole[tah->dox][tah->doy] != NIC)
+	if (hra->plocha[tah->dox][tah->doy] != NIC)
 	{
 		int i;
 		for (i=0; i<30; i++)
 		{
-			if (vyhozeno[i] == NIC) break;
+			if (hra->vyhozeno[i] == NIC) break;
 		}
-		vyhozeno[i] = pole[tah->dox][tah->doy];
+		hra->vyhozeno[i] = hra->plocha[tah->dox][tah->doy];
 	}
-	pole[tah->dox][tah->doy] = pole[tah->zx][tah->zy];
-	pole[tah->zx][tah->zy] = NIC;
+	hra->plocha[tah->dox][tah->doy] = hra->plocha[tah->zx][tah->zy];
+	hra->plocha[tah->zx][tah->zy] = NIC;
 	// Nastavení flagů
 	if (hra->flagy[BKRAL] == false && tah->kdo == BKRA && tah->zx == RAD1 && tah->zy == SLOE) hra->flagy[BKRAL] = true;
 	if (hra->flagy[BVEZ1] == false && tah->kdo == BVEZ && tah->zx == RAD1 && tah->zy == SLOA) hra->flagy[BVEZ1] = true;

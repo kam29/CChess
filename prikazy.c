@@ -1,6 +1,9 @@
 #ifndef prikazyc
 #define prikazyc
 
+#define OPRAV
+
+#include <stdio.h>
 #include <stdbool.h>
 #include <ctype.h>
 #include <string.h>
@@ -72,17 +75,17 @@ char VratFigurku (char znak, bool barva)
 
 bool ValidujPrikaz (tah_t* tah, char* prikaz, bool brava)
 {
-	
+	return true;
 }
 
 char NactiPrikaz (char* prikaz, unsigned int max)
 {
 	char c;
 	unsigned int count = 0;
-	while(!isspace(c = getc()))
+	while(!isspace(c = getchar()))
 	{
 		if (c == EOF) return ERRPRIKAZ;
-		if (count == max) return OPRAV;
+		if (count == max) return ERROPRAV;
 		prikaz[count] = c;
 		count++;
 	}
@@ -103,7 +106,7 @@ bool ZpracujPrikaz (char* prikaz, hra_t* hra)
 		{
 			for (int j=0; j<8; j++)
 			{
-				if (tah.kdo == hra->pole[i][j])
+				if (tah.kdo == hra->plocha[i][j])
 				{
 					if (!nedostatek)
 					{
@@ -131,6 +134,7 @@ bool ZpracujPrikaz (char* prikaz, hra_t* hra)
 		if (!ValidujTah(hra, &tah)) return false;
 		ProvedTah(hra, &tah);
 	}
+	return true;
 }
 
 #endif
