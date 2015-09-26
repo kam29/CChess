@@ -32,14 +32,22 @@ char VratSloupec (char znak)
 {
 	switch (znak)
 	{
-		case 'a': return SLOA;
-		case 'b': return SLOB;
-		case 'c': return SLOC;
-		case 'd': return SLOD;
-		case 'e': return SLOE;
-		case 'f': return SLOF;
-		case 'g': return SLOG;
-		case 'h': return SLOH;
+		case 'a': 
+		case 'A': return SLOA;
+		case 'b': 
+		case 'B': return SLOB;
+		case 'c': 
+		case 'C': return SLOC;
+		case 'd': 
+		case 'D': return SLOD;
+		case 'e': 
+		case 'E': return SLOE;
+		case 'f': 
+		case 'F': return SLOF;
+		case 'g': 
+		case 'G': return SLOG;
+		case 'h': 
+		case 'H': return SLOH;
 	}
 	return NIC;
 }

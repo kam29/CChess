@@ -157,7 +157,9 @@ void AktualizujGrafiku(hra_t* hra)
 		}
 		else printf (" ");
 	}
-	printf("\n\nZadej tah: ");
+	printf("\n\nZadej tah ");
+	if (hra->barva == BILA) printf ("(bílý): ");
+	else printf ("(černý): ");
 }
 
 int main () 
@@ -172,6 +174,7 @@ int main ()
 	// Inicializace síťového připojení
 	if (hra->barva == BILA)
 	{
+		while (true) {
 		while (true)
 		{
 			kontrola = NactiPrikaz(prikaz, MAXDELKAPRIKAZU);
@@ -181,22 +184,26 @@ int main ()
 		if (!ZpracujPrikaz(prikaz, hra)) {
 			Chyba(ERRPRIKAZ, hra);
 		}
+		if (hra->barva == CERNA) hra->barva = BILA;
+		else hra->barva = CERNA;
 		AktualizujGrafiku(hra);
-	}
-	while (true)
-	{
-		// Uložení příchozího příkazu do proměné příkaz
-		if (!ZpracujPrikaz(prikaz, hra)) Chyba(ERRPRIKAZ, hra);
-		AktualizujGrafiku(hra);
-		while (true)
-		{
-			kontrola = NactiPrikaz(prikaz, MAXDELKAPRIKAZU); 
-			if (kontrola == ERRPRIKAZ) Chyba(ERRPRIKAZ, hra);
-			if (kontrola == OK) break;
 		}
-		if (!ZpracujPrikaz(prikaz, hra)) Chyba(ERRPRIKAZ, hra);
-		AktualizujGrafiku(hra);
 	}
+//	while (true)
+//	{
+//		printf("Cykl");
+//		// Uložení příchozího příkazu do proměné příkaz
+//		if (!ZpracujPrikaz(prikaz, hra)) Chyba(ERRPRIKAZ, hra);
+//		AktualizujGrafiku(hra);
+//		while (true)
+//		{
+//			kontrola = NactiPrikaz(prikaz, MAXDELKAPRIKAZU); 
+//			if (kontrola == ERRPRIKAZ) Chyba(ERRPRIKAZ, hra);
+//			if (kontrola == OK) break;
+//		}
+//		if (!ZpracujPrikaz(prikaz, hra)) Chyba(ERRPRIKAZ, hra);
+//		AktualizujGrafiku(hra);
+//	}
 	Chyba(OK, hra);
 	return 0;
 }

@@ -133,13 +133,11 @@ bool ValidujTah(hra_t* hra, tah_t* tah)
 
 			break;
 		case BPES:
-			printf("BPES");
-			if (tah->zy == RAD2 && tah->doy-tah->zy == 2 && hra->plocha[tah->dox][tah->doy] != NIC) break;
-			if (tah->doy-tah->zy != 1) return false;
-			else if ((tah->zx == tah->dox) && (hra->plocha[tah->dox][tah->doy] != NIC)) return false;
-			else if ((tah->zx+1 == tah->dox) && (hra->plocha[tah->dox][tah->doy] == NIC)) return false;
-			else if ((tah->zx-1 == tah->dox) && (hra->plocha[tah->dox][tah->doy] == NIC)) return false;	
-			else return false;
+			if (tah->zx == RAD2 && tah->dox-tah->zx == 2 && hra->plocha[tah->dox][tah->doy] == NIC) return true;
+			if (tah->dox-tah->zx != 1) return false;
+			else if ((tah->zy == tah->doy) && (hra->plocha[tah->dox][tah->doy] != NIC)) return false;
+			else if ((tah->zy+1 == tah->doy) && (hra->plocha[tah->dox][tah->doy] == NIC)) return false;
+			else if ((tah->zy-1 == tah->doy) && (hra->plocha[tah->dox][tah->doy] == NIC)) return false;	
 			if (tah->dox == RAD8)
 			{
 				for (i=0; i<30; i++)
@@ -148,15 +146,14 @@ bool ValidujTah(hra_t* hra, tah_t* tah)
 				}
 				return false;
 			}
-			printf("BPES2");
 			break;
 		case CPES:
-			if (tah->zy == RAD7 && tah->zy-tah->doy == 2 && hra->plocha[tah->dox][tah->doy] != NIC) break;
-			if (tah->zy-tah->doy != 1) return false;
-			else if ((tah->zx == tah->dox) && (hra->plocha[tah->dox][tah->doy] != NIC)) return false;
-			else if ((tah->zx+1 == tah->dox) && (hra->plocha[tah->dox][tah->doy] == NIC)) return false;
-			else if ((tah->zx-1 == tah->dox) && (hra->plocha[tah->dox][tah->doy] == NIC)) return false;
-			else return false;
+			if (tah->zx == RAD7 && tah->zx-tah->dox == 2 && hra->plocha[tah->dox][tah->doy] == NIC) return true;
+			if (tah->zx-tah->dox != 1) return false;
+			else if ((tah->zy == tah->doy) && (hra->plocha[tah->dox][tah->doy] != NIC)) return false;
+			else if ((tah->zy+1 == tah->doy) && (hra->plocha[tah->dox][tah->doy] == NIC)) return false;
+			else if ((tah->zy-1 == tah->doy) && (hra->plocha[tah->dox][tah->doy] == NIC)) return false;
+			if (tah->dox == RAD1)
 			{
 				for (i=0; i<30; i++)
 				{
@@ -172,7 +169,6 @@ bool ValidujTah(hra_t* hra, tah_t* tah)
 
 void ProvedTah(hra_t* hra, tah_t* tah)
 {
-	printf("PROVEDTAH");
 	if (hra->plocha[tah->dox][tah->doy] != NIC)
 	{
 		int i;
