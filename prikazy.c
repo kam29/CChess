@@ -165,7 +165,7 @@ bool ZpracujPrikaz (char* prikaz, hra_t* hra)
 					{
 						tah.zx = i;
 						tah.zy = j;
-						if (ValidujTah(hra, &tah)) nedostatek = true;
+						if (ValidujTah(hra, &tah, true)) nedostatek = true;
 					}
 					else
 					{
@@ -173,7 +173,7 @@ bool ZpracujPrikaz (char* prikaz, hra_t* hra)
 						pomy = tah.zy;
 						tah.zx = i;
 						tah.zy = j;
-						if (ValidujTah(hra, &tah)) return false;
+						if (ValidujTah(hra, &tah, true)) return false;
 						tah.zx = pomx;
 						tah.zy = pomy;
 					}
@@ -184,7 +184,7 @@ bool ZpracujPrikaz (char* prikaz, hra_t* hra)
 	}
 	else 
 	{
-		if (!ValidujTah(hra, &tah)) {
+		if (!ValidujTah(hra, &tah, true)) {
 			return false;
 		}
 		ProvedTah(hra, &tah);

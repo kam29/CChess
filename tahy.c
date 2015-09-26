@@ -1,5 +1,3 @@
-// obracené sloupce a řádky
-
 #ifndef tahyc
 #define tahyc
 
@@ -7,11 +5,65 @@
 
 #include "global.h"
 
+bool ValidujTah(hra_t* hra, tah_t* tah, bool sach);
+
+void ProvedTah(hra_t* hra, tah_t* tah)
+{
+	if (hra->plocha[tah->dox][tah->doy] != NIC)
+	{
+		int i;
+		for (i=0; i<30; i++)
+		{
+			if (hra->vyhozeno[i] == NIC) break;
+		}
+		hra->vyhozeno[i] = hra->plocha[tah->dox][tah->doy];
+	}
+	hra->plocha[tah->dox][tah->doy] = hra->plocha[tah->zx][tah->zy];
+	hra->plocha[tah->zx][tah->zy] = NIC;
+	// Nastavení flagů
+	if (hra->flagy[BKRAL] == false && tah->kdo == BKRA && tah->zx == RAD1 && tah->zy == SLOE) hra->flagy[BKRAL] = true;
+	if (hra->flagy[BVEZ1] == false && tah->kdo == BVEZ && tah->zx == RAD1 && tah->zy == SLOA) hra->flagy[BVEZ1] = true;
+	if (hra->flagy[BVEZ2] == false && tah->kdo == BVEZ && tah->zx == RAD1 && tah->zy == SLOH) hra->flagy[BVEZ2] = true;
+	if (hra->flagy[CKRAL] == false && tah->kdo == CKRA && tah->zx == RAD8 && tah->zy == SLOE) hra->flagy[CKRAL] = true;
+	if (hra->flagy[CVEZ1] == false && tah->kdo == CVEZ && tah->zx == RAD8 && tah->zy == SLOA) hra->flagy[CVEZ1] = true;
+	if (hra->flagy[CVEZ2] == false && tah->kdo == CVEZ && tah->zx == RAD8 && tah->zy == SLOH) hra->flagy[CVEZ2] = true;
+}
+
 bool ValidujSach(tah_t* tah, hra_t* hra) {
+	unsigned char i, j;
+	unsigned char pozx = NIC;
+	unsigned char pozy = NIC;
+	tah_t tah2;
+	hra_t zaloha;
+	zaloha = *hra;
+	ProvedTah(&zaloha, tah);
+	for (i=0; i<RAD8; i++) {
+		for (j=0; j<SLOH; j++) {
+			if ((zaloha.plocha[i][j] == BKRA && zaloha.barva == CERNA) || (zaloha.plocha[i][j] == CKRA && zaloha.barva == BILA)) {
+				pozx = i;
+				pozy = j;
+				break;
+			}
+		}
+		if (pozx != NIC) break;
+	}
+	for (i=0; i<RAD8; i++) {
+		for (j=0; j<SLOH; j++) {
+			if (zaloha.plocha[i][j] != NIC) {
+				tah2.zx = i;
+				tah2.zy = j;
+				tah2.kdo = zaloha.plocha[i][j];
+				tah2.special = NIC;
+				tah2.dox = pozx;
+				tah2.doy = pozy;
+				if (ValidujTah(&zaloha, &tah2, false)) return false;
+			}
+		}
+	}
 	return true;
 }
 
-bool ValidujTah(hra_t* hra, tah_t* tah)
+bool ValidujTah(hra_t* hra, tah_t* tah, bool sach)
 {
 	unsigned char i, j;
 	// Speciální tahy
@@ -163,30 +215,12 @@ bool ValidujTah(hra_t* hra, tah_t* tah)
 			}
 			break;
 	}
-	if (!ValidujSach(tah, hra)) return false; // Zkontroluje, jestli hráč po provedení tahu není v šachu
+	if (sach) {
+		if (!ValidujSach(tah, hra)) return false; // Zkontroluje, jestli hráč po provedení tahu není v šachu
+	}
 	return true;
 }
 
-void ProvedTah(hra_t* hra, tah_t* tah)
-{
-	if (hra->plocha[tah->dox][tah->doy] != NIC)
-	{
-		int i;
-		for (i=0; i<30; i++)
-		{
-			if (hra->vyhozeno[i] == NIC) break;
-		}
-		hra->vyhozeno[i] = hra->plocha[tah->dox][tah->doy];
-	}
-	hra->plocha[tah->dox][tah->doy] = hra->plocha[tah->zx][tah->zy];
-	hra->plocha[tah->zx][tah->zy] = NIC;
-	// Nastavení flagů
-	if (hra->flagy[BKRAL] == false && tah->kdo == BKRA && tah->zx == RAD1 && tah->zy == SLOE) hra->flagy[BKRAL] = true;
-	if (hra->flagy[BVEZ1] == false && tah->kdo == BVEZ && tah->zx == RAD1 && tah->zy == SLOA) hra->flagy[BVEZ1] = true;
-	if (hra->flagy[BVEZ2] == false && tah->kdo == BVEZ && tah->zx == RAD1 && tah->zy == SLOH) hra->flagy[BVEZ2] = true;
-	if (hra->flagy[CKRAL] == false && tah->kdo == CKRA && tah->zx == RAD8 && tah->zy == SLOE) hra->flagy[CKRAL] = true;
-	if (hra->flagy[CVEZ1] == false && tah->kdo == CVEZ && tah->zx == RAD8 && tah->zy == SLOA) hra->flagy[CVEZ1] = true;
-	if (hra->flagy[CVEZ2] == false && tah->kdo == CVEZ && tah->zx == RAD8 && tah->zy == SLOH) hra->flagy[CVEZ2] = true;
-}
+
 
 #endif
