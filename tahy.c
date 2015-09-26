@@ -7,6 +7,16 @@
 
 bool ValidujTah(hra_t* hra, tah_t* tah, bool sach);
 
+bool Sach(hra_t* hra)
+{
+	return false;
+}
+
+bool Mat(hra_t* hra)
+{
+	return false;
+}
+
 void ProvedTah(hra_t* hra, tah_t* tah)
 {
 	if (hra->plocha[tah->dox][tah->doy] != NIC)
@@ -21,6 +31,21 @@ void ProvedTah(hra_t* hra, tah_t* tah)
 	hra->plocha[tah->dox][tah->doy] = hra->plocha[tah->zx][tah->zy];
 	hra->plocha[tah->zx][tah->zy] = NIC;
 	// Nastavení flagů
+	hra->flagy[BSACH] = false;
+	hra->flagy[CSACH] = false;
+	if (Sach(hra)) 
+	{
+		if (hra->barva == BILA) 
+		{
+			hra->flagy[BSACH] = true;
+			if (Mat(hra)) hra->flagy[BMAT] = true;
+		}
+		else
+		{
+			hra->flagy[BSACH] = true;
+			if (Mat(hra)) hra->flagy[CMAT] = true;
+		}
+	}
 	if (hra->flagy[BKRAL] == false && tah->kdo == BKRA && tah->zx == RAD1 && tah->zy == SLOE) hra->flagy[BKRAL] = true;
 	if (hra->flagy[BVEZ1] == false && tah->kdo == BVEZ && tah->zx == RAD1 && tah->zy == SLOA) hra->flagy[BVEZ1] = true;
 	if (hra->flagy[BVEZ2] == false && tah->kdo == BVEZ && tah->zx == RAD1 && tah->zy == SLOH) hra->flagy[BVEZ2] = true;
@@ -29,6 +54,7 @@ void ProvedTah(hra_t* hra, tah_t* tah)
 	if (hra->flagy[CVEZ2] == false && tah->kdo == CVEZ && tah->zx == RAD8 && tah->zy == SLOH) hra->flagy[CVEZ2] = true;
 }
 
+// Využít funkce Sach pro validaci šachu
 bool ValidujSach(tah_t* tah, hra_t* hra) {
 	unsigned char i, j;
 	unsigned char pozx = NIC;
@@ -56,7 +82,11 @@ bool ValidujSach(tah_t* tah, hra_t* hra) {
 				tah2.special = NIC;
 				tah2.dox = pozx;
 				tah2.doy = pozy;
-				if (ValidujTah(&zaloha, &tah2, false)) return false;
+				if (ValidujTah(&zaloha, &tah2, false)) {
+					printf("CHECK");
+					return false;
+				printf("NO");
+				}
 			}
 		}
 	}
@@ -216,7 +246,10 @@ bool ValidujTah(hra_t* hra, tah_t* tah, bool sach)
 			break;
 	}
 	if (sach) {
-		if (!ValidujSach(tah, hra)) return false; // Zkontroluje, jestli hráč po provedení tahu není v šachu
+		if (!ValidujSach(tah, hra)) {
+			printf("KONTROLA");
+			return false; // Zkontroluje, jestli hráč po provedení tahu není v šachu
+		}
 	}
 	return true;
 }

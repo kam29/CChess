@@ -29,13 +29,13 @@ enum SPECIAL
 
 enum FLAGSY
 {
-	BKRAL=0, CKRAL, BVEZ1, BVEZ2, CVEZ1, CVEZ2, BIMOA, BMIMOB, BMIMOC, BMIMOD, BMIMOE, BMIMOF, BMIMOG, BMIMOH, CIMOA, CMIMOB, CMIMOC, CMIMOD, CMIMOE, CMIMOF, CMIMOG, CMIMOH,
+	BKRAL=0, CKRAL, BVEZ1, BVEZ2, CVEZ1, CVEZ2, BIMOA, BMIMOB, BMIMOC, BMIMOD, BMIMOE, BMIMOF, BMIMOG, BMIMOH, CIMOA, CMIMOB, CMIMOC, CMIMOD, CMIMOE, CMIMOF, CMIMOG, CMIMOH, BSACH, CSACH, BMAT, CMAT
 };
 
 typedef struct hra_t {
 	char plocha [8][8];
 	char vyhozeno [30];
-	bool flagy [22]; //8+8 pro řádky na kterých se uzkutečňuje braní mimochodem; hnutý král a obě věže pro každou barvu
+	bool flagy [26]; //8+8 pro řádky na kterých se uzkutečňuje braní mimochodem; hnutý král a obě věže pro každou barvu; obě barvy pro šach a mat
 	bool barva;
 } hra_t;
 

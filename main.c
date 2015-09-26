@@ -13,7 +13,7 @@
 void Inicializace(hra_t* hra)
 {
 	for (int i=0; i<32; i++) hra->vyhozeno[i] = NIC;
-	for (int i=0; i<22; i++) hra->flagy[i] = false;
+	for (int i=0; i<26; i++) hra->flagy[i] = false;
 	for (int i=RAD3; i<=RAD8; i++) for (int j=SLOA; j<=SLOH; j++) hra->plocha [i][j] = NIC;
 	hra->plocha [RAD1][SLOA] = BVEZ;
 	hra->plocha [RAD1][SLOB] = BJEZ;
@@ -157,7 +157,13 @@ void AktualizujGrafiku(hra_t* hra)
 		}
 		else printf (" ");
 	}
-	printf("\n\nZadej tah ");
+	printf("\n");
+	if (hra->flagy[BSACH]) printf(BARVA1 "  Šach  " BARVA0);
+	if (hra->flagy[CSACH]) printf(BARVA2 "  Šach  " BARVA0);
+	if (hra->flagy[BMAT]) printf(BARVA1 "  Mat  " BARVA0);
+	if (hra->flagy[CMAT]) printf(BARVA2  " Mat  " BARVA0);
+	printf("\n");
+	printf("Zadej tah ");
 	if (hra->barva == BILA) printf ("(bílý): ");
 	else printf ("(černý): ");
 }
@@ -187,6 +193,10 @@ int main ()
 		if (hra->barva == CERNA) hra->barva = BILA;
 		else hra->barva = CERNA;
 		AktualizujGrafiku(hra);
+		if (hra->flagy[BMAT] == true || hra->flagy[CMAT] == true)
+		{
+			break;
+		}
 		}
 	}
 //	while (true)
