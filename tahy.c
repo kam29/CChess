@@ -63,30 +63,34 @@ bool ValidujSach(tah_t* tah, hra_t* hra) {
 	hra_t zaloha;
 	zaloha = *hra;
 	ProvedTah(&zaloha, tah);
-	for (i=0; i<RAD8; i++) {
-		for (j=0; j<SLOH; j++) {
-			if ((zaloha.plocha[i][j] == BKRA && zaloha.barva == CERNA) || (zaloha.plocha[i][j] == CKRA && zaloha.barva == BILA)) {
-				pozx = i;
-				pozy = j;
-				break;
-			}
+	for (i=0; i<=RAD8; i++) 
+	{
+		for (j=0; j<=SLOH; j++) 
+		{
+				if ((zaloha.plocha[i][j] == BKRA && zaloha.barva == BILA) || (zaloha.plocha[i][j] == CKRA && zaloha.barva == CERNA)) 
+				{
+					pozx = i;
+					pozy = j;
+					break;
+				}
 		}
 		if (pozx != NIC) break;
 	}
-	for (i=0; i<RAD8; i++) {
-		for (j=0; j<SLOH; j++) {
-			if (zaloha.plocha[i][j] != NIC) {
+	if (zaloha.barva == BILA) zaloha.barva = CERNA;
+	else zaloha.barva = BILA;
+	for (i=0; i<=RAD8; i++) 
+	{
+		for (j=0; j<=SLOH; j++) 
+		{
+			if (zaloha.plocha[i][j] != NIC && (((zaloha.plocha[i][j] <= BPES) && (zaloha.barva == BILA)) || ((zaloha.plocha[i][j] > BPES) && (zaloha.barva == CERNA)))) 
+			{
 				tah2.zx = i;
 				tah2.zy = j;
 				tah2.kdo = zaloha.plocha[i][j];
 				tah2.special = NIC;
 				tah2.dox = pozx;
 				tah2.doy = pozy;
-				if (ValidujTah(&zaloha, &tah2, false)) {
-					printf("CHECK");
-					return false;
-				printf("NO");
-				}
+				if (ValidujTah(&zaloha, &tah2, false)) return false;
 			}
 		}
 	}
@@ -127,6 +131,8 @@ bool ValidujTah(hra_t* hra, tah_t* tah, bool sach)
 	}
 	// Normální tahy
 	if (tah->kdo != hra->plocha[tah->zx][tah->zy]) return false;
+	if ((hra->barva == BILA && tah->kdo > BPES) || (hra->barva == CERNA && tah->kdo <= BPES)) return false;
+	if ((hra->plocha[tah->dox][tah->doy] != NIC) && ((hra->barva == BILA && hra->plocha[tah->dox][tah->doy] <= BPES) || (hra->barva == CERNA && hra->plocha[tah->dox][tah->doy] > BPES))) return false;
 	switch (tah->kdo)
 	{
 		case BKRA:
@@ -215,7 +221,7 @@ bool ValidujTah(hra_t* hra, tah_t* tah, bool sach)
 
 			break;
 		case BPES:
-			if (tah->zx == RAD2 && tah->dox-tah->zx == 2 && hra->plocha[tah->dox][tah->doy] == NIC) return true;
+			if (tah->zx == RAD2 && tah->dox-tah->zx == 2 && hra->plocha[tah->dox][tah->doy] == NIC) break;
 			if (tah->dox-tah->zx != 1) return false;
 			else if ((tah->zy == tah->doy) && (hra->plocha[tah->dox][tah->doy] != NIC)) return false;
 			else if ((tah->zy+1 == tah->doy) && (hra->plocha[tah->dox][tah->doy] == NIC)) return false;
@@ -230,7 +236,7 @@ bool ValidujTah(hra_t* hra, tah_t* tah, bool sach)
 			}
 			break;
 		case CPES:
-			if (tah->zx == RAD7 && tah->zx-tah->dox == 2 && hra->plocha[tah->dox][tah->doy] == NIC) return true;
+			if (tah->zx == RAD7 && tah->zx-tah->dox == 2 && hra->plocha[tah->dox][tah->doy] == NIC) break;
 			if (tah->zx-tah->dox != 1) return false;
 			else if ((tah->zy == tah->doy) && (hra->plocha[tah->dox][tah->doy] != NIC)) return false;
 			else if ((tah->zy+1 == tah->doy) && (hra->plocha[tah->dox][tah->doy] == NIC)) return false;
@@ -245,11 +251,9 @@ bool ValidujTah(hra_t* hra, tah_t* tah, bool sach)
 			}
 			break;
 	}
-	if (sach) {
-		if (!ValidujSach(tah, hra)) {
-			printf("KONTROLA");
-			return false; // Zkontroluje, jestli hráč po provedení tahu není v šachu
-		}
+	if (sach) 
+	{
+		if (!ValidujSach(tah, hra)) return false; // Zkontroluje, jestli hráč po provedení tahu není v šachu
 	}
 	return true;
 }
