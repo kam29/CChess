@@ -9,6 +9,42 @@ bool ValidujTah(hra_t* hra, tah_t* tah, bool sach);
 
 bool Sach(hra_t* hra)
 {
+	unsigned char i, j;
+	unsigned char pozx = NIC;
+	unsigned char pozy = NIC;
+	tah_t tah2;
+	for (i=0; i<=RAD8; i++) 
+	{
+		for (j=0; j<=SLOH; j++) 
+		{
+				if ((hra->plocha[i][j] == BKRA && hra->barva == CERNA) || (hra->plocha[i][j] == CKRA && hra->barva == BILA)) 
+				{
+					pozx = i;
+					pozy = j;
+					break;
+				}
+		}
+		if (pozx != NIC) break;
+	}
+	for (i=0; i<=RAD8; i++) 
+	{
+		for (j=0; j<=SLOH; j++) 
+		{
+			if (hra->plocha[i][j] != NIC && (((hra->plocha[i][j] <= BPES) && (hra->barva == BILA)) || ((hra->plocha[i][j] > BPES) && (hra->barva == CERNA)))) 
+			{
+				tah2.zx = i;
+				tah2.zy = j;
+				tah2.kdo = hra->plocha[i][j];
+				tah2.special = NIC;
+				tah2.dox = pozx;
+				tah2.doy = pozy;
+				if (ValidujTah(hra, &tah2, false)) 
+				{
+				return true;
+				}
+			}
+		}
+	}
 	return false;
 }
 
@@ -42,7 +78,7 @@ void ProvedTah(hra_t* hra, tah_t* tah)
 		}
 		else
 		{
-			hra->flagy[BSACH] = true;
+			hra->flagy[CSACH] = true;
 			if (Mat(hra)) hra->flagy[CMAT] = true;
 		}
 	}
