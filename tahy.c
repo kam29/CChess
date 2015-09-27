@@ -50,7 +50,40 @@ bool Sach(hra_t* hra)
 
 bool Mat(hra_t* hra)
 {
-	return false;
+	tah_t tah;
+	unsigned char i, j, k, l;
+	if (hra->barva == BILA) hra->barva = CERNA;
+	else hra->barva = BILA;
+	for (i=0; i<=RAD8; i++) 
+	{
+		for (j=0; j<=SLOH; j++) 
+		{
+			if ((hra->barva == BILA && hra->plocha[i][j] <= BPES) || (hra->barva == CERNA && hra->plocha[i][j] > BPES && hra->plocha[i][j] != NIC))
+			{
+				tah.zx = i;
+				tah.zy = j;
+				tah.kdo = hra->plocha[i][j];
+				tah.special = NIC;
+				for (k=0; k<=RAD8; k++)
+				{
+					for (l=0; l<=SLOH; l++)
+					{
+						tah.dox = k;
+						tah.doy = l;
+						if (ValidujTah(hra, &tah, true)) 
+						{
+							if (hra->barva == BILA) hra->barva = CERNA;
+							else hra->barva = BILA;
+							return false; //rozhodnout jak detekovat šach
+						}
+					}
+				}
+			}
+		}
+	}
+	if (hra->barva == BILA) hra->barva = CERNA;
+	else hra->barva = BILA;
+	return true;
 }
 
 void ProvedTah(hra_t* hra, tah_t* tah)
