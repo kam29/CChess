@@ -163,9 +163,6 @@ void AktualizujGrafiku(hra_t* hra)
 	if (hra->flagy[BMAT]) printf(BARVA1 "  Mat  " BARVA0);
 	if (hra->flagy[CMAT]) printf(BARVA2  " Mat  " BARVA0);
 	printf("\n");
-	printf("Zadej tah ");
-	if (hra->barva == BILA) printf ("(bílý): ");
-	else printf ("(černý): ");
 }
 
 int main () 
@@ -183,12 +180,22 @@ int main ()
 		while (true) {
 		while (true)
 		{
+			printf("Zadej tah ");
+			if (hra->barva == BILA) printf ("(bílý): ");
+			else printf ("(černý): ");
 			kontrola = NactiPrikaz(prikaz, MAXDELKAPRIKAZU);
 			if (kontrola == ERRPRIKAZ) Chyba(kontrola, hra);
-			if (kontrola == OK) break;
-		}
-		if (!ZpracujPrikaz(prikaz, hra)) {
-			Chyba(ERRPRIKAZ, hra);
+			if (kontrola != OK) 
+			{
+				printf("Špatný příkaz   ");
+				continue;
+			}
+			if (!ZpracujPrikaz(prikaz, hra)) 
+			{
+				printf("Špatný příkaz   ");
+				continue;
+			}
+			break;
 		}
 		if (hra->barva == CERNA) hra->barva = BILA;
 		else hra->barva = CERNA;
