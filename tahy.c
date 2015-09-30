@@ -107,6 +107,7 @@ void ProvedTah(hra_t* hra, tah_t* tah)
 			if (hra->vyhozeno[i] == NIC) break;
 		}
 		hra->vyhozeno[i] = hra->plocha[tah->zx][tah->doy];
+		hra->plocha[tah->zx][tah->doy] = NIC;
 	}
 	// Nastavení flagů
 	if (hra->barva == BILA)
