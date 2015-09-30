@@ -162,6 +162,7 @@ void AktualizujGrafiku(hra_t* hra)
 	if (hra->flagy[CSACH]) printf(BARVA2 "  Šach  " BARVA0);
 	if (hra->flagy[BMAT]) printf(BARVA1 "  Mat  " BARVA0);
 	if (hra->flagy[CMAT]) printf(BARVA2  " Mat  " BARVA0);
+	if (hra->flagy[CMIMOF]) printf("  MIMO  ");
 	printf("\n");
 	printf("Zadej tah ");
 	if (hra->barva == BILA) printf ("(bílý): ");

@@ -74,7 +74,7 @@ bool Mat(hra_t* hra)
 						{
 							if (hra->barva == BILA) hra->barva = CERNA;
 							else hra->barva = BILA;
-							return false; //rozhodnout jak detekovat šach
+							return false;
 						}
 					}
 				}
@@ -99,7 +99,84 @@ void ProvedTah(hra_t* hra, tah_t* tah)
 	}
 	hra->plocha[tah->dox][tah->doy] = hra->plocha[tah->zx][tah->zy];
 	hra->plocha[tah->zx][tah->zy] = NIC;
+	if (tah->special == MIMO)
+	{
+		int i;
+		for (i=0; i<30; i++)
+		{
+			if (hra->vyhozeno[i] == NIC) break;
+		}
+		hra->vyhozeno[i] = hra->plocha[tah->zx][tah->doy];
+	}
 	// Nastavení flagů
+	if (hra->barva == BILA)
+	{
+		for (int i=BMIMOA; i<=BMIMOH; i++) hra->flagy[i] = false;
+	}
+	else
+	{
+		for (int i=CMIMOA; i<=CMIMOH; i++) hra->flagy[i] = false;
+	}
+	if (tah->kdo == BPES && tah->zx == RAD2 && tah->dox-tah->zx == 2)	
+	{
+		switch (tah->doy)
+		{
+			case SLOA:
+				hra->flagy[BMIMOA] = true;
+				break;
+			case SLOB:
+				hra->flagy[BMIMOB] = true;
+				break;
+			case SLOC:
+				hra->flagy[BMIMOC] = true;
+				break;
+			case SLOD:
+				hra->flagy[BMIMOD] = true;
+				break;
+			case SLOE:
+				hra->flagy[BMIMOE] = true;
+				break;
+			case SLOF:
+				hra->flagy[BMIMOF] = true;
+				break;
+			case SLOG:
+				hra->flagy[BMIMOG] = true;
+				break;
+			case SLOH:
+				hra->flagy[BMIMOH] = true;
+				break;	
+		}
+	}
+	if (tah->kdo == CPES && tah->zx == RAD7 && tah->zx-tah->dox == 2)
+	{
+		switch (tah->doy)
+		{
+			case SLOA:
+				hra->flagy[CMIMOA] = true;
+				break;
+			case SLOB:
+				hra->flagy[CMIMOB] = true;
+				break;
+			case SLOC:
+				hra->flagy[CMIMOC] = true;
+				break;
+			case SLOD:
+				hra->flagy[CMIMOD] = true;
+				break;
+			case SLOE:
+				hra->flagy[CMIMOE] = true;
+				break;
+			case SLOF:
+				hra->flagy[CMIMOF] = true;
+				break;
+			case SLOG:
+				hra->flagy[CMIMOG] = true;
+				break;
+			case SLOH:
+				hra->flagy[CMIMOH] = true;
+				break;	
+		}
+	}
 	hra->flagy[BSACH] = false;
 	hra->flagy[CSACH] = false;
 	if (Sach(hra)) 
@@ -290,11 +367,12 @@ bool ValidujTah(hra_t* hra, tah_t* tah, bool sach)
 
 			break;
 		case BPES:
-			if (tah->zx == RAD2 && tah->dox-tah->zx == 2 && hra->plocha[tah->dox][tah->doy] == NIC) break;
+			if (tah->zx == RAD2 && tah->dox-tah->zx == 2 && hra->plocha[tah->dox][tah->doy] == NIC) break;	
 			if (tah->dox-tah->zx != 1) return false;
 			else if ((tah->zy == tah->doy) && (hra->plocha[tah->dox][tah->doy] != NIC)) return false;
-			else if ((tah->zy+1 == tah->doy) && (hra->plocha[tah->dox][tah->doy] == NIC)) return false;
-			else if ((tah->zy-1 == tah->doy) && (hra->plocha[tah->dox][tah->doy] == NIC)) return false;	
+			else if ((tah->zy+1 == tah->doy) && (hra->plocha[tah->dox][tah->doy] == NIC && (hra->plocha[tah->zx][tah->doy] != CPES || hra->flagy[tah->doy+CMIMOA] == false))) return false;
+			else if ((tah->zy-1 == tah->doy) && (hra->plocha[tah->dox][tah->doy] == NIC && (hra->plocha[tah->zx][tah->doy] != CPES || hra->flagy[tah->doy+CMIMOA] == false))) return false;
+			if ((tah->zy+1 == tah->doy || tah->zy-1 == tah->doy) && hra->plocha[tah->zx][tah->doy] == CPES && hra->flagy[tah->doy+CMIMOA] == true) tah->special = MIMO;
 			if (tah->dox == RAD8)
 			{
 				for (i=0; i<30; i++)
@@ -305,11 +383,12 @@ bool ValidujTah(hra_t* hra, tah_t* tah, bool sach)
 			}
 			break;
 		case CPES:
-			if (tah->zx == RAD7 && tah->zx-tah->dox == 2 && hra->plocha[tah->dox][tah->doy] == NIC) break;
+			if (tah->zx == RAD7 && tah->zx-tah->dox == 2 && hra->plocha[tah->dox][tah->doy] == NIC) break;			
 			if (tah->zx-tah->dox != 1) return false;
 			else if ((tah->zy == tah->doy) && (hra->plocha[tah->dox][tah->doy] != NIC)) return false;
-			else if ((tah->zy+1 == tah->doy) && (hra->plocha[tah->dox][tah->doy] == NIC)) return false;
-			else if ((tah->zy-1 == tah->doy) && (hra->plocha[tah->dox][tah->doy] == NIC)) return false;
+			else if ((tah->zy+1 == tah->doy) && (hra->plocha[tah->dox][tah->doy] == NIC && (hra->plocha[tah->zx][tah->doy] != CPES || hra->flagy[tah->doy+BMIMOA] == false))) return false;
+			else if ((tah->zy-1 == tah->doy) && (hra->plocha[tah->dox][tah->doy] == NIC && (hra->plocha[tah->zx][tah->doy] != CPES || hra->flagy[tah->doy+BMIMOA] == false))) return false;
+			if ((tah->zy+1 == tah->doy || tah->zy-1 == tah->doy) && hra->plocha[tah->zx][tah->doy] == BPES && hra->flagy[tah->doy+BMIMOA] == true) tah->special = MIMO;
 			if (tah->dox == RAD1)
 			{
 				for (i=0; i<30; i++)
