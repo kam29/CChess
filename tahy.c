@@ -88,6 +88,26 @@ bool Mat(hra_t* hra)
 
 void ProvedTah(hra_t* hra, tah_t* tah)
 {
+	if (tah->special == MROS && hra->barva == BILA)
+	{
+		hra->plocha[RAD1][SLOH] = BKRA;
+		hra->plocha[RAD1][SLOE] = BVEZ;
+	}
+	else if (tah->special == VROS && hra->barva == BILA)
+	{
+		hra->plocha[RAD1][SLOA] = BKRA;
+		hra->plocha[RAD1][SLOE] = BVEZ;
+	}
+	else if (tah->special == MROS && hra->barva == CERNA)
+	{
+		hra->plocha[RAD8][SLOH] = CKRA;
+		hra->plocha[RAD8][SLOE] = CVEZ;
+	}
+	else if (tah->special == MROS && hra->barva == CERNA)
+	{
+		hra->plocha[RAD8][SLOA] = CKRA;
+		hra->plocha[RAD8][SLOE] = CVEZ;
+	}
 	if (hra->plocha[tah->dox][tah->doy] != NIC)
 	{
 		int i;

@@ -153,7 +153,8 @@ char NactiPrikaz (char* prikaz, unsigned int max)
 		count++;
 	}
 	prikaz[count] = '\0';
-	return OK;
+	if (c == EOF || (c == '\n' && count == 0)) return ERRPRIKAZ;
+	else return OK;
 }
 
 bool ZpracujPrikaz (char* prikaz, hra_t* hra)

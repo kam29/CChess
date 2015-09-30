@@ -15,7 +15,7 @@ void Chyba (char typ, hra_t* struktura)
 			fprintf(stdout, "Malloc error");
 			break;
 		case ERRPRIKAZ:
-			fprintf(stdout, "Špatně zadaný příkaz");
+			fprintf(stdout, "Konec programu");
 			break;
 	}
 	if (typ != OK) fprintf(stdout, "  error: %d\n", typ);

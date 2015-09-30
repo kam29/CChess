@@ -52,6 +52,7 @@ void Inicializace(hra_t* hra)
 void AktualizujGrafiku(hra_t* hra) 
 {
 	unsigned char i, j;
+	fflush(stdout);
 	system("clear");
 	for (i=0; i<8; i++) {
 		for (j=0; j<65; j++) {
@@ -185,7 +186,7 @@ int main ()
 			else printf ("(černý): ");
 			kontrola = NactiPrikaz(prikaz, MAXDELKAPRIKAZU);
 			if (kontrola == ERRPRIKAZ) Chyba(kontrola, hra);
-			if (kontrola != OK) 
+			if (kontrola != OK)
 			{
 				printf("Špatný příkaz   ");
 				continue;
