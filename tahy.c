@@ -274,6 +274,14 @@ bool ValidujTah(hra_t* hra, tah_t* tah, bool sach)
 		if (hra->plocha[RAD1][SLOF] != NIC || hra->plocha[RAD1][SLOG] != NIC) return false;
 		if (hra->flagy[BKRAL] == true || hra->flagy[BVEZ2] == true) return false;
 		hra->flagy[BKRAL] = hra->flagy[BVEZ2] = true;
+		tah->zx = RAD1;
+		tah->zy = SLOE;
+		tah->kdo = BKRA;
+		tah->dox = RAD1;
+		tah->doy = SLOF;
+		if (!ValidujSach(tah, hra)) return false;
+		tah->doy = SLOG;
+		if (!ValidujSach(tah, hra)) return false;
 		return true;
 	}
 	if (tah->special == VROS && hra->barva == BILA)
@@ -282,6 +290,14 @@ bool ValidujTah(hra_t* hra, tah_t* tah, bool sach)
 		if (hra->plocha[RAD1][SLOB] != NIC || hra->plocha[RAD1][SLOC] != NIC || hra->plocha[RAD1][SLOD]) return false;
 		if (hra->flagy[BKRAL] == true || hra->flagy[BVEZ1] == true) return false;
 		hra->flagy[BKRAL] = hra->flagy[BVEZ1] = true;
+		tah->zx = RAD1;
+		tah->zy = SLOE;
+		tah->kdo = BKRA;
+		tah->dox = RAD1;
+		tah->doy = SLOD;
+		if (!ValidujSach(tah, hra)) return false;
+		tah->doy = SLOC;
+		if (!ValidujSach(tah, hra)) return false;
 		return true;
 	}
 	if (tah->special == MROS && hra->barva == CERNA)
@@ -290,6 +306,14 @@ bool ValidujTah(hra_t* hra, tah_t* tah, bool sach)
 		if (hra->plocha[RAD8][SLOF] != NIC || hra->plocha[RAD8][SLOG] != NIC) return false;
 		if (hra->flagy[CKRAL] == true || hra->flagy[CVEZ2] == true) return false;
 		hra->flagy[CKRAL] = hra->flagy[CVEZ2] = true;
+		tah->zx = RAD8;
+		tah->zy = SLOE;
+		tah->kdo = CKRA;
+		tah->dox = RAD8;
+		tah->doy = SLOF;
+		if (!ValidujSach(tah, hra)) return false;
+		tah->doy = SLOG;
+		if (!ValidujSach(tah, hra)) return false;
 		return true;
 	}
 	if (tah->special == VROS && hra->barva == CERNA)
@@ -298,6 +322,14 @@ bool ValidujTah(hra_t* hra, tah_t* tah, bool sach)
 		if (hra->plocha[RAD8][SLOB] != NIC || hra->plocha[RAD8][SLOC] != NIC || hra->plocha[RAD8][SLOD]) return false;
 		if (hra->flagy[CKRAL] == true || hra->flagy[CVEZ1] == true) return false;
 		hra->flagy[CKRAL] = hra->flagy[CVEZ1] = true;
+		tah->zx = RAD8;
+		tah->zy = SLOE;
+		tah->kdo = CKRA;
+		tah->dox = RAD8;
+		tah->doy = SLOD;
+		if (!ValidujSach(tah, hra)) return false;
+		tah->doy = SLOC;
+		if (!ValidujSach(tah, hra)) return false;
 		return true;
 	}
 	// Normální tahy

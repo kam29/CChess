@@ -18,7 +18,7 @@ void Chyba (char typ, hra_t* struktura)
 			fprintf(stdout, "Konec programu");
 			break;
 	}
-	if (typ != OK) fprintf(stdout, "  error: %d\n", typ);
+	if (typ != OK || typ != ERRPRIKAZ) fprintf(stdout, "  error: %d\n", typ);
 	exit(typ);
 }
 
