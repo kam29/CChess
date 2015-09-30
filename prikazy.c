@@ -85,7 +85,17 @@ char VratFigurku (char znak, bool barva)
 
 bool ValidujPrikaz (tah_t* tah, char* prikaz, bool barva)
 {
-	tah->special = NIC;
+	if (!strcmp(prikaz, "0-0")) 
+	{
+		tah->special = MROS;
+		return true;
+	}
+	else if(!strcmp(prikaz, "0-0-0")) 
+	{
+		tah->special = VROS;
+		return true;
+	}
+	else tah->special = NIC;
 	int znaky = strlen(prikaz);
 	switch (znaky)
 	{

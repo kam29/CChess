@@ -247,30 +247,34 @@ bool ValidujSach(tah_t* tah, hra_t* hra) {
 bool ValidujTah(hra_t* hra, tah_t* tah, bool sach)
 {
 	unsigned char i, j;
-	// Speciální tahy
-	if (tah->special == BMRO)
+	// Rošády - dořešit projití přes šach a zkounčení v šachu
+	if (tah->special == MROS && hra->barva == BILA)
 	{
+		if (hra->flagy[BSACH]) return false;
 		if (hra->plocha[RAD1][SLOF] != NIC || hra->plocha[RAD1][SLOG] != NIC) return false;
 		if (hra->flagy[BKRAL] == true || hra->flagy[BVEZ2] == true) return false;
 		hra->flagy[BKRAL] = hra->flagy[BVEZ2] = true;
 		return true;
 	}
-	if (tah->special == BVRO)
+	if (tah->special == VROS && hra->barva == BILA)
 	{
+		if (hra->flagy[BSACH]) return false;	
 		if (hra->plocha[RAD1][SLOB] != NIC || hra->plocha[RAD1][SLOC] != NIC || hra->plocha[RAD1][SLOD]) return false;
 		if (hra->flagy[BKRAL] == true || hra->flagy[BVEZ1] == true) return false;
 		hra->flagy[BKRAL] = hra->flagy[BVEZ1] = true;
 		return true;
 	}
-	if (tah->special == CMRO)
+	if (tah->special == MROS && hra->barva == CERNA)
 	{
+		if (hra->flagy[CSACH]) return false;
 		if (hra->plocha[RAD8][SLOF] != NIC || hra->plocha[RAD8][SLOG] != NIC) return false;
 		if (hra->flagy[CKRAL] == true || hra->flagy[CVEZ2] == true) return false;
 		hra->flagy[CKRAL] = hra->flagy[CVEZ2] = true;
 		return true;
 	}
-	if (tah->special == CVRO)
+	if (tah->special == VROS && hra->barva == CERNA)
 	{
+		if (hra->flagy[CSACH]) return false;
 		if (hra->plocha[RAD8][SLOB] != NIC || hra->plocha[RAD8][SLOC] != NIC || hra->plocha[RAD8][SLOD]) return false;
 		if (hra->flagy[CKRAL] == true || hra->flagy[CVEZ1] == true) return false;
 		hra->flagy[CKRAL] = hra->flagy[CVEZ1] = true;
