@@ -107,18 +107,16 @@ bool ValidujPrikaz (tah_t* tah, char* prikaz, bool barva)
 			tah->doy = VratSloupec(prikaz[0]);
 			tah->dox = VratRadek(prikaz[1]);
 			if (tah->dox == NIC || tah->doy == NIC) return false;
-			else return true;
-			break;
+			else break;
 		case 4:
 			if (barva == BILA) tah->kdo = BPES;
 			else tah->kdo = CPES;
-			tah->zx = VratSloupec(prikaz[0]);
-			tah->zy = VratRadek(prikaz[1]);
+			tah->zy = VratSloupec(prikaz[0]);
+			tah->zx = VratRadek(prikaz[1]);
 			tah->doy = VratSloupec(prikaz[2]);
 			tah->dox = VratRadek(prikaz[3]);
 			if (tah->dox == NIC || tah->doy == NIC || tah->zx == NIC || tah->zy == NIC) return false;
-			else return true;
-			break;
+			else break;
 		case 3:
 			tah->kdo = VratFigurku(prikaz[0], barva);
 			tah->zx = NIC;
@@ -126,8 +124,7 @@ bool ValidujPrikaz (tah_t* tah, char* prikaz, bool barva)
 			tah->doy = VratSloupec(prikaz[1]);
 			tah->dox = VratRadek(prikaz[2]);
 			if (tah->kdo == NIC || tah->dox == NIC || tah->doy == NIC) return false;
-			else return true;
-			break;
+			else break;
 		case 5:
 			tah->kdo = VratFigurku(prikaz[0], barva);
 			tah->zy = VratSloupec(prikaz[1]);
@@ -135,9 +132,8 @@ bool ValidujPrikaz (tah_t* tah, char* prikaz, bool barva)
 			tah->doy = VratSloupec(prikaz[3]);
 			tah->dox = VratRadek(prikaz[4]);
 			if (tah->kdo == NIC || tah->dox == NIC || tah->doy == NIC || tah->zx == NIC || tah->zy == NIC) return false;
-			else return true;
-			break;
-	}		
+			else break;
+	}
 	return true;
 }
 
@@ -161,7 +157,6 @@ bool ZpracujPrikaz (char* prikaz, hra_t* hra)
 {
 	tah_t tah;
 	if (!ValidujPrikaz(&tah, prikaz, hra->barva)) return false;
-	// dořešit speciální tahy
 	if (tah.zx == NIC)
 	{
 		bool nedostatek = false;

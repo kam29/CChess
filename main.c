@@ -169,8 +169,9 @@ void AktualizujGrafiku(hra_t* hra)
 int main () 
 {
 	hra_t* hra = malloc(sizeof(hra_t));
-	if (hra == NULL) Chyba(ERRMALLOC, NULL);
+	if (hra == NULL) Chyba(ERRMALLOC, NULL, NULL);
 	char* prikaz = malloc(MAXDELKAPRIKAZU);
+	if (prikaz == NULL) Chyba(ERRMALLOC, NULL, hra);
 	char kontrola;
 	Inicializace(hra);
 	hra->barva = BILA;
@@ -185,7 +186,7 @@ int main ()
 			if (hra->barva == BILA) printf ("(bílý): ");
 			else printf ("(černý): ");
 			kontrola = NactiPrikaz(prikaz, MAXDELKAPRIKAZU);
-			if (kontrola == ERRPRIKAZ) Chyba(kontrola, hra);
+			if (kontrola == ERRPRIKAZ) Chyba(kontrola, prikaz, hra);
 			if (kontrola != OK)
 			{
 				printf("Špatný příkaz   ");
@@ -211,17 +212,17 @@ int main ()
 //	{
 //		printf("Cykl");
 //		// Uložení příchozího příkazu do proměné příkaz
-//		if (!ZpracujPrikaz(prikaz, hra)) Chyba(ERRPRIKAZ, hra);
+//		if (!ZpracujPrikaz(prikaz, hra)) Chyba(ERRPRIKAZ, prikaz, hra);
 //		AktualizujGrafiku(hra);
 //		while (true)
 //		{
 //			kontrola = NactiPrikaz(prikaz, MAXDELKAPRIKAZU); 
-//			if (kontrola == ERRPRIKAZ) Chyba(ERRPRIKAZ, hra);
+//			if (kontrola == ERRPRIKAZ) Chyba(ERRPRIKAZ, prikaz, hra);
 //			if (kontrola == OK) break;
 //		}
-//		if (!ZpracujPrikaz(prikaz, hra)) Chyba(ERRPRIKAZ, hra);
+//		if (!ZpracujPrikaz(prikaz, hra)) Chyba(ERRPRIKAZ, prikaz, hra);
 //		AktualizujGrafiku(hra);
 //	}
-	Chyba(OK, hra);
+	Chyba(OK, prikaz, hra);
 	return 0;
 }

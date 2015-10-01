@@ -2,10 +2,76 @@
 #define tahyc
 
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 #include "global.h"
+#include "prikazy.h"
 
 bool ValidujTah(hra_t* hra, tah_t* tah, bool sach);
+
+char VymenPesce (hra_t* hra)
+{
+	printf("Zvol figurku: ");
+	char figurka;
+	char* prikaz = malloc(MAXDELKAPRIKAZU);
+	if (NactiPrikaz(prikaz, MAXDELKAPRIKAZU) != OK) return NIC;
+	figurka = prikaz[0];
+	free(prikaz);
+	if (hra->barva == BILA)
+	{
+		switch (figurka)
+		{
+			case 'V':
+				figurka = BVEZ;
+				break;
+			case 'J':
+				figurka = BJEZ;
+				break;
+			case 'S':
+				figurka = BSTR;
+				break;
+			case 'D':
+				figurka = BDAM;
+				break;
+			case 'N':
+				figurka = BPES;
+				break;
+			default:
+				return false;
+				break;				
+		}
+	}
+	else
+	{
+		switch (figurka)
+		{
+			case 'V':
+				figurka = CVEZ;
+				break;
+			case 'J':
+				figurka = CJEZ;
+				break;
+			case 'S':
+				figurka = CSTR;
+				break;
+			case 'D':
+				figurka = CDAM;
+				break;
+			case 'N':
+				figurka = CPES;
+				break;
+			default:
+				return NIC;
+				break;				
+		}
+	}
+	for (int i=0; i<30; i++)
+	{
+		if (hra->vyhozeno[i] == figurka) return figurka;
+	}
+	return NIC;
+}
 
 bool Sach(hra_t* hra)
 {
@@ -128,6 +194,11 @@ void ProvedTah(hra_t* hra, tah_t* tah)
 		}
 		hra->vyhozeno[i] = hra->plocha[tah->zx][tah->doy];
 		hra->plocha[tah->zx][tah->doy] = NIC;
+	}
+	if ((tah->kdo == BPES && tah->dox == RAD8) || (tah->kdo == CPES && tah->dox == RAD1))
+	{
+		if (tah->special == BPES || tah->special == CPES) hra->plocha[tah->dox][tah->doy] = NIC;
+		hra->plocha[tah->dox][tah->doy] = tah->special;
 	}
 	// Nastavení flagů
 	if (hra->barva == BILA)
@@ -426,33 +497,30 @@ bool ValidujTah(hra_t* hra, tah_t* tah, bool sach)
 		case BPES:
 			if (tah->zx == RAD2 && tah->dox-tah->zx == 2 && hra->plocha[tah->dox][tah->doy] == NIC) break;	
 			if (tah->dox-tah->zx != 1) return false;
+			if(tah->doy < tah->zy-1 || tah->doy > tah->zy+1) return false;
 			else if ((tah->zy == tah->doy) && (hra->plocha[tah->dox][tah->doy] != NIC)) return false;
 			else if ((tah->zy+1 == tah->doy) && (hra->plocha[tah->dox][tah->doy] == NIC && (hra->plocha[tah->zx][tah->doy] != CPES || hra->flagy[tah->doy+CMIMOA] == false))) return false;
 			else if ((tah->zy-1 == tah->doy) && (hra->plocha[tah->dox][tah->doy] == NIC && (hra->plocha[tah->zx][tah->doy] != CPES || hra->flagy[tah->doy+CMIMOA] == false))) return false;
 			if ((tah->zy+1 == tah->doy || tah->zy-1 == tah->doy) && hra->plocha[tah->zx][tah->doy] == CPES && hra->flagy[tah->doy+CMIMOA] == true) tah->special = MIMO;
 			if (tah->dox == RAD8)
 			{
-				for (i=0; i<30; i++)
-				{
-					if (hra->vyhozeno[i] == tah->special) break;
-				}
-				return false;
+				tah->special = VymenPesce(hra);
+				if (tah->special == NIC) return false;
 			}
 			break;
 		case CPES:
 			if (tah->zx == RAD7 && tah->zx-tah->dox == 2 && hra->plocha[tah->dox][tah->doy] == NIC) break;			
 			if (tah->zx-tah->dox != 1) return false;
+			if(tah->doy < tah->zy-1 || tah->doy > tah->zy+1) return false;
 			else if ((tah->zy == tah->doy) && (hra->plocha[tah->dox][tah->doy] != NIC)) return false;
 			else if ((tah->zy+1 == tah->doy) && (hra->plocha[tah->dox][tah->doy] == NIC && (hra->plocha[tah->zx][tah->doy] != CPES || hra->flagy[tah->doy+BMIMOA] == false))) return false;
 			else if ((tah->zy-1 == tah->doy) && (hra->plocha[tah->dox][tah->doy] == NIC && (hra->plocha[tah->zx][tah->doy] != CPES || hra->flagy[tah->doy+BMIMOA] == false))) return false;
 			if ((tah->zy+1 == tah->doy || tah->zy-1 == tah->doy) && hra->plocha[tah->zx][tah->doy] == BPES && hra->flagy[tah->doy+BMIMOA] == true) tah->special = MIMO;
 			if (tah->dox == RAD1)
 			{
-				for (i=0; i<30; i++)
-				{
-					if (hra->vyhozeno[i] == tah->special) break;
-				}
-				return false;
+				printf("%d %d %d %d %d ", tah->zx, tah->zy, tah->kdo, tah->dox, tah->doy);
+				tah->special = VymenPesce(hra);
+				if (tah->special == NIC) return false;
 			}
 			break;
 	}

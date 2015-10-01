@@ -2,6 +2,6 @@
 #define errorh
 
 #include "global.h"
-void Chyba (char typ, hra_t* struktura);
+void Chyba (char typ, char* prikaz, hra_t* struktura);
 
 #endif

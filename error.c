@@ -6,9 +6,10 @@
 
 #include "global.h"
 
-void Chyba (char typ, hra_t* struktura) 
+void Chyba (char typ, char* prikaz, hra_t* struktura) 
 {
 	if (struktura != NULL) free(struktura);
+	if (prikaz != NULL) free(prikaz);
 	switch (typ)
 	{
 		case ERRMALLOC:
