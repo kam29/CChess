@@ -156,24 +156,33 @@ void ProvedTah(hra_t* hra, tah_t* tah)
 {
 	if (tah->special == MROS && hra->barva == BILA)
 	{
-		hra->plocha[RAD1][SLOH] = BKRA;
-		hra->plocha[RAD1][SLOE] = BVEZ;
+		hra->plocha[RAD1][SLOH] = NIC;
+		hra->plocha[RAD1][SLOG] = BKRAL;
+		hra->plocha[RAD1][SLOF] = BVEZ;
+		hra->plocha[RAD1][SLOE] = NIC;
 	}
 	else if (tah->special == VROS && hra->barva == BILA)
 	{
-		hra->plocha[RAD1][SLOA] = BKRA;
-		hra->plocha[RAD1][SLOE] = BVEZ;
+		hra->plocha[RAD1][SLOA] = NIC;
+		hra->plocha[RAD1][SLOC] = BKRAL;
+		hra->plocha[RAD1][SLOE] = NIC;
+		hra->plocha[RAD1][SLOD] = BVEZ;
 	}
 	else if (tah->special == MROS && hra->barva == CERNA)
 	{
-		hra->plocha[RAD8][SLOH] = CKRA;
-		hra->plocha[RAD8][SLOE] = CVEZ;
+		hra->plocha[RAD8][SLOH] = NIC;
+		hra->plocha[RAD8][SLOG] = CKRA;
+		hra->plocha[RAD8][SLOF] = CVEZ;
+		hra->plocha[RAD8][SLOE] = NIC;
 	}
 	else if (tah->special == MROS && hra->barva == CERNA)
 	{
-		hra->plocha[RAD8][SLOA] = CKRA;
-		hra->plocha[RAD8][SLOE] = CVEZ;
+		hra->plocha[RAD8][SLOA] = NIC;
+		hra->plocha[RAD8][SLOC] = CKRAL;
+		hra->plocha[RAD8][SLOE] = NIC;
+		hra->plocha[RAD8][SLOD] = CVEZ;
 	}
+	else {
 	if (hra->plocha[tah->dox][tah->doy] != NIC)
 	{
 		int i;
@@ -199,6 +208,7 @@ void ProvedTah(hra_t* hra, tah_t* tah)
 	{
 		if (tah->special == BPES || tah->special == CPES) hra->plocha[tah->dox][tah->doy] = NIC;
 		hra->plocha[tah->dox][tah->doy] = tah->special;
+	}
 	}
 	// Nastavení flagů
 	if (hra->barva == BILA)
@@ -344,7 +354,6 @@ bool ValidujTah(hra_t* hra, tah_t* tah, bool sach)
 		if (hra->flagy[BSACH]) return false;
 		if (hra->plocha[RAD1][SLOF] != NIC || hra->plocha[RAD1][SLOG] != NIC) return false;
 		if (hra->flagy[BKRAL] == true || hra->flagy[BVEZ2] == true) return false;
-		hra->flagy[BKRAL] = hra->flagy[BVEZ2] = true;
 		tah->zx = RAD1;
 		tah->zy = SLOE;
 		tah->kdo = BKRA;
@@ -353,6 +362,7 @@ bool ValidujTah(hra_t* hra, tah_t* tah, bool sach)
 		if (!ValidujSach(tah, hra)) return false;
 		tah->doy = SLOG;
 		if (!ValidujSach(tah, hra)) return false;
+		hra->flagy[BKRAL] = hra->flagy[BVEZ2] = true;
 		return true;
 	}
 	if (tah->special == VROS && hra->barva == BILA)
@@ -360,7 +370,6 @@ bool ValidujTah(hra_t* hra, tah_t* tah, bool sach)
 		if (hra->flagy[BSACH]) return false;	
 		if (hra->plocha[RAD1][SLOB] != NIC || hra->plocha[RAD1][SLOC] != NIC || hra->plocha[RAD1][SLOD]) return false;
 		if (hra->flagy[BKRAL] == true || hra->flagy[BVEZ1] == true) return false;
-		hra->flagy[BKRAL] = hra->flagy[BVEZ1] = true;
 		tah->zx = RAD1;
 		tah->zy = SLOE;
 		tah->kdo = BKRA;
@@ -369,6 +378,7 @@ bool ValidujTah(hra_t* hra, tah_t* tah, bool sach)
 		if (!ValidujSach(tah, hra)) return false;
 		tah->doy = SLOC;
 		if (!ValidujSach(tah, hra)) return false;
+		hra->flagy[BKRAL] = hra->flagy[BVEZ1] = true;
 		return true;
 	}
 	if (tah->special == MROS && hra->barva == CERNA)
@@ -411,7 +421,7 @@ bool ValidujTah(hra_t* hra, tah_t* tah, bool sach)
 	{
 		case BKRA:
 		case CKRA:
-			if (!((tah->zx == tah->dox && (tah->zy == tah->doy+1 || tah->zy == tah->doy-1)) || (tah->zy == tah->doy && (tah->zx == tah->dox+1 || tah->zx == tah->dox-1)))) return false;
+			if (tah->zx < tah->dox-1 || tah->zx > tah->dox+1 || tah->zy < tah->doy-1 || tah->zy > tah->doy+1) return false;
 			break;;
 		case BJEZ:
 		case CJEZ:
