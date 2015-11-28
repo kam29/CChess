@@ -186,8 +186,9 @@ int main ()
 			if (hra->barva == BILA) printf ("(bílý): ");
 			else printf ("(černý): ");
 			kontrola = NactiPrikaz(prikaz, MAXDELKAPRIKAZU);
-			if (kontrola == ERRPRIKAZ) Chyba(kontrola, prikaz, hra);
-			if (kontrola != OK)
+			if (kontrola == ERRKONEC) Chyba(OK, prikaz, hra);
+			else if (kontrola == ERRPRIKAZ) Chyba(kontrola, prikaz, hra);
+			else if (kontrola != OK)
 			{
 				printf("Špatný příkaz   ");
 				continue;

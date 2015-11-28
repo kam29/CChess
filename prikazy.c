@@ -59,11 +59,17 @@ char VratFigurku (char znak, bool barva)
 	{
 		switch (znak)
 		{
-			case 'K': return BKRA;
+			case 'K': 
+			case 'k': return BKRA;
+			case 'd':
 			case 'D': return BDAM;
+			case 's': 
 			case 'S': return BSTR;
+			case 'j': 
 			case 'J': return BJEZ;
+			case 'v': 
 			case 'V': return BVEZ;
+			case 'p': 
 			case 'P': return BPES;
 		}
 		return NIC;
@@ -72,11 +78,17 @@ char VratFigurku (char znak, bool barva)
 	{
 		switch (znak)
 		{
+			case 'k': 
 			case 'K': return CKRA;
+			case 'd': 
 			case 'D': return CDAM;
+			case 's': 
 			case 'S': return CSTR;
+			case 'j': 
 			case 'J': return CJEZ;
+			case 'v': 
 			case 'V': return CVEZ;
+			case 'p': 
 			case 'P': return CPES;
 		}
 		return NIC;
@@ -96,43 +108,13 @@ bool ValidujPrikaz (tah_t* tah, char* prikaz, bool barva)
 		return true;
 	}
 	else tah->special = NIC;
-	int znaky = strlen(prikaz);
-	switch (znaky)
-	{
-		case 2:
-			if (barva == BILA) tah->kdo = BPES;
-			else tah->kdo = CPES;
-			tah->zx = NIC;
-			tah->zy = NIC;
-			tah->doy = VratSloupec(prikaz[0]);
-			tah->dox = VratRadek(prikaz[1]);
-			if (tah->dox == NIC || tah->doy == NIC) return false;
-			else break;
-		case 4:
-			if (barva == BILA) tah->kdo = BPES;
-			else tah->kdo = CPES;
-			tah->zy = VratSloupec(prikaz[0]);
-			tah->zx = VratRadek(prikaz[1]);
-			tah->doy = VratSloupec(prikaz[2]);
-			tah->dox = VratRadek(prikaz[3]);
-			if (tah->dox == NIC || tah->doy == NIC || tah->zx == NIC || tah->zy == NIC) return false;
-			else break;
-		case 3:
-			tah->kdo = VratFigurku(prikaz[0], barva);
-			tah->zx = NIC;
-			tah->zy = NIC;
-			tah->doy = VratSloupec(prikaz[1]);
-			tah->dox = VratRadek(prikaz[2]);
-			if (tah->kdo == NIC || tah->dox == NIC || tah->doy == NIC) return false;
-			else break;
-		case 5:
-			tah->kdo = VratFigurku(prikaz[0], barva);
-			tah->zy = VratSloupec(prikaz[1]);
-			tah->zx = VratRadek(prikaz[2]);
-			tah->doy = VratSloupec(prikaz[3]);
-			tah->dox = VratRadek(prikaz[4]);
-			if (tah->kdo == NIC || tah->dox == NIC || tah->doy == NIC || tah->zx == NIC || tah->zy == NIC) return false;
-			else break;
+	if (5 == strlen(prikaz)) {
+		tah->kdo = VratFigurku(prikaz[0], barva);
+		tah->zy = VratSloupec(prikaz[1]);
+		tah->zx = VratRadek(prikaz[2]);
+		tah->doy = VratSloupec(prikaz[3]);
+		tah->dox = VratRadek(prikaz[4]);
+		if (tah->kdo == NIC || tah->dox == NIC || tah->doy == NIC || tah->zx == NIC || tah->zy == NIC) return false;
 	}
 	return true;
 }
@@ -143,13 +125,14 @@ char NactiPrikaz (char* prikaz, unsigned int max)
 	unsigned int count = 0;
 	while(!isspace(c = getchar()))
 	{
-		if (c == EOF) return ERRPRIKAZ;
+		if (c == EOF) return ERRKONEC;
 		if (count == max) return ERROPRAV;
 		prikaz[count] = c;
 		count++;
 	}
 	prikaz[count] = '\0';
-	if (c == EOF || (c == '\n' && count == 0)) return ERRPRIKAZ;
+	if (c == '\n' && count == 0) return ERRPRIKAZ;
+	if (c == EOF) return ERRKONEC;
 	else return OK;
 }
 
@@ -157,44 +140,10 @@ bool ZpracujPrikaz (char* prikaz, hra_t* hra)
 {
 	tah_t tah;
 	if (!ValidujPrikaz(&tah, prikaz, hra->barva)) return false;
-	if (tah.zx == NIC)
-	{
-		bool nedostatek = false;
-		char pomx, pomy;
-		for (int i=0; i<8; i++)
-		{
-			for (int j=0; j<8; j++)
-			{
-				if (tah.kdo == hra->plocha[i][j])
-				{
-					if (!nedostatek)
-					{
-						tah.zx = i;
-						tah.zy = j;
-						if (ValidujTah(hra, &tah, true)) nedostatek = true;
-					}
-					else
-					{
-						pomx = tah.zx;
-						pomy = tah.zy;
-						tah.zx = i;
-						tah.zy = j;
-						if (ValidujTah(hra, &tah, true)) return false;
-						tah.zx = pomx;
-						tah.zy = pomy;
-					}
-				}
-			}
-		}
-		ProvedTah(hra, &tah);
+	if (!ValidujTah(hra, &tah, true)) {
+		return false;
 	}
-	else 
-	{
-		if (!ValidujTah(hra, &tah, true)) {
-			return false;
-		}
-		ProvedTah(hra, &tah);
-	}
+	ProvedTah(hra, &tah);
 	return true;
 }
 

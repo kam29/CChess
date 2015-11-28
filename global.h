@@ -56,7 +56,8 @@ enum CHYBY {
 	OK = 0,
 	ERROPRAV,
 	ERRMALLOC,
-	ERRPRIKAZ
+	ERRPRIKAZ,
+	ERRKONEC, 
 };
 
 #endif
