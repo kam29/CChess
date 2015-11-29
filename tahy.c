@@ -157,14 +157,14 @@ void ProvedTah(hra_t* hra, tah_t* tah)
 	if (tah->special == MROS && hra->barva == BILA)
 	{
 		hra->plocha[RAD1][SLOH] = NIC;
-		hra->plocha[RAD1][SLOG] = BKRAL;
+		hra->plocha[RAD1][SLOG] = BKRA;
 		hra->plocha[RAD1][SLOF] = BVEZ;
 		hra->plocha[RAD1][SLOE] = NIC;
 	}
 	else if (tah->special == VROS && hra->barva == BILA)
 	{
 		hra->plocha[RAD1][SLOA] = NIC;
-		hra->plocha[RAD1][SLOC] = BKRAL;
+		hra->plocha[RAD1][SLOC] = BKRA;
 		hra->plocha[RAD1][SLOE] = NIC;
 		hra->plocha[RAD1][SLOD] = BVEZ;
 	}
@@ -175,10 +175,10 @@ void ProvedTah(hra_t* hra, tah_t* tah)
 		hra->plocha[RAD8][SLOF] = CVEZ;
 		hra->plocha[RAD8][SLOE] = NIC;
 	}
-	else if (tah->special == MROS && hra->barva == CERNA)
+	else if (tah->special == VROS && hra->barva == CERNA)
 	{
 		hra->plocha[RAD8][SLOA] = NIC;
-		hra->plocha[RAD8][SLOC] = CKRAL;
+		hra->plocha[RAD8][SLOC] = CKRA;
 		hra->plocha[RAD8][SLOE] = NIC;
 		hra->plocha[RAD8][SLOD] = CVEZ;
 	}
@@ -368,7 +368,7 @@ bool ValidujTah(hra_t* hra, tah_t* tah, bool sach)
 	if (tah->special == VROS && hra->barva == BILA)
 	{
 		if (hra->flagy[BSACH]) return false;	
-		if (hra->plocha[RAD1][SLOB] != NIC || hra->plocha[RAD1][SLOC] != NIC || hra->plocha[RAD1][SLOD]) return false;
+		if (hra->plocha[RAD1][SLOB] != NIC || hra->plocha[RAD1][SLOC] != NIC || hra->plocha[RAD1][SLOD] != NIC) return false;
 		if (hra->flagy[BKRAL] == true || hra->flagy[BVEZ1] == true) return false;
 		tah->zx = RAD1;
 		tah->zy = SLOE;
@@ -400,7 +400,7 @@ bool ValidujTah(hra_t* hra, tah_t* tah, bool sach)
 	if (tah->special == VROS && hra->barva == CERNA)
 	{
 		if (hra->flagy[CSACH]) return false;
-		if (hra->plocha[RAD8][SLOB] != NIC || hra->plocha[RAD8][SLOC] != NIC || hra->plocha[RAD8][SLOD]) return false;
+		if (hra->plocha[RAD8][SLOB] != NIC || hra->plocha[RAD8][SLOC] != NIC || hra->plocha[RAD8][SLOD] != NIC) return false;
 		if (hra->flagy[CKRAL] == true || hra->flagy[CVEZ1] == true) return false;
 		hra->flagy[CKRAL] = hra->flagy[CVEZ1] = true;
 		tah->zx = RAD8;
