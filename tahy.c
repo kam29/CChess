@@ -12,65 +12,76 @@ bool ValidujTah(hra_t* hra, tah_t* tah, bool sach);
 
 char VymenPesce (hra_t* hra)
 {
-	printf("Zvol figurku: ");
+	bool vyhozeno = false;
+	for (int i=0; i<30; i++)
+		if ((!vyhozeno) && ((hra->barva == BILA && hra->vyhozeno[i] < BPES) || (hra->barva == CERNA && hra->vyhozeno[i] > BPES && hra->vyhozeno[i] < CPES))) {
+			vyhozeno = true;
+			break;
+		}
+	if (!vyhozeno) return NIC;
 	char figurka;
 	char* prikaz = malloc(MAXDELKAPRIKAZU);
-	if (NactiPrikaz(prikaz, MAXDELKAPRIKAZU) != OK) return NIC;
-	figurka = prikaz[0];
-	free(prikaz);
-	if (hra->barva == BILA)
-	{
-		switch (figurka)
+	while (true) {
+		printf("Zvol figurku: ");
+		if (NactiPrikaz(prikaz, MAXDELKAPRIKAZU) != OK) return NIC;
+		figurka = prikaz[0];
+		free(prikaz);
+		if (hra->barva == BILA)
 		{
-			case 'V':
-				figurka = BVEZ;
-				break;
-			case 'J':
-				figurka = BJEZ;
-				break;
-			case 'S':
-				figurka = BSTR;
-				break;
-			case 'D':
-				figurka = BDAM;
-				break;
-			case 'N':
-				figurka = BPES;
-				break;
-			default:
-				return false;
-				break;				
+			switch (figurka)
+			{
+				case 'v':
+				case 'V':
+					figurka = BVEZ;
+					break;
+				case 'j':
+				case 'J':
+					figurka = BJEZ;
+					break;
+				case 's':
+				case 'S':
+					figurka = BSTR;
+					break;
+				case 'd':
+				case 'D':
+					figurka = BDAM;
+					break;
+				default:
+					figurka = BKRA;
+					break;			
+			}
 		}
-	}
-	else
-	{
-		switch (figurka)
+		else
 		{
-			case 'V':
-				figurka = CVEZ;
-				break;
-			case 'J':
-				figurka = CJEZ;
-				break;
-			case 'S':
-				figurka = CSTR;
-				break;
-			case 'D':
-				figurka = CDAM;
-				break;
-			case 'N':
-				figurka = CPES;
-				break;
-			default:
-				return NIC;
-				break;				
+			switch (figurka)
+			{
+				case 'v':
+				case 'V':
+					figurka = CVEZ;
+					break;
+				case 'j':
+				case 'J':
+					figurka = CJEZ;
+					break;
+				case 's':
+				case 'S':
+					figurka = CSTR;
+					break;
+				case 'd':
+				case 'D':
+					figurka = CDAM;
+					break;
+				default:
+					figurka = CKRA;
+					break;				
+			}
 		}
+		for (int i=0; i<30; i++)
+		{
+			if (hra->vyhozeno[i] == figurka) return figurka;
+		}
+		printf("Špatná figurka! ");
 	}
-	for (int i=0; i<30; i++)
-	{
-		if (hra->vyhozeno[i] == figurka) return figurka;
-	}
-	return NIC;
 }
 
 bool Sach(hra_t* hra)
@@ -522,15 +533,13 @@ bool ValidujTah(hra_t* hra, tah_t* tah, bool sach)
 			if (tah->zx == RAD7 && tah->zx-tah->dox == 2 && hra->plocha[tah->dox][tah->doy] == NIC) break;			
 			if (tah->zx-tah->dox != 1) return false;
 			if(tah->doy < tah->zy-1 || tah->doy > tah->zy+1) return false;
-			else if ((tah->zy == tah->doy) && (hra->plocha[tah->dox][tah->doy] != NIC)) return false;
-			else if ((tah->zy+1 == tah->doy) && (hra->plocha[tah->dox][tah->doy] == NIC && (hra->plocha[tah->zx][tah->doy] != CPES || hra->flagy[tah->doy+BMIMOA] == false))) return false;
-			else if ((tah->zy-1 == tah->doy) && (hra->plocha[tah->dox][tah->doy] == NIC && (hra->plocha[tah->zx][tah->doy] != CPES || hra->flagy[tah->doy+BMIMOA] == false))) return false;
+			if ((tah->zy == tah->doy) && (hra->plocha[tah->dox][tah->doy] != NIC)) return false;
+			if ((tah->zy+1 == tah->doy) && (hra->plocha[tah->dox][tah->doy] == NIC && (hra->plocha[tah->zx][tah->doy] != CPES || hra->flagy[tah->doy+BMIMOA] == false))) return false;
+			if ((tah->zy-1 == tah->doy) && (hra->plocha[tah->dox][tah->doy] == NIC && (hra->plocha[tah->zx][tah->doy] != CPES || hra->flagy[tah->doy+BMIMOA] == false))) return false;
 			if ((tah->zy+1 == tah->doy || tah->zy-1 == tah->doy) && hra->plocha[tah->zx][tah->doy] == BPES && hra->flagy[tah->doy+BMIMOA] == true) tah->special = MIMO;
-			if (tah->dox == RAD1)
+			if (tah->dox == RAD1 || tah->dox == RAD8)
 			{
-				printf("%d %d %d %d %d ", tah->zx, tah->zy, tah->kdo, tah->dox, tah->doy);
 				tah->special = VymenPesce(hra);
-				if (tah->special == NIC) return false;
 			}
 			break;
 	}
